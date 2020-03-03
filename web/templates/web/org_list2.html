@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+  <form method="get">
+    {% csrf_token %}
+    {{ filter.form.as_p }}
+    <button type="submit">Search</button>
+  </form>
+  <ul>
+  {% for org in filter.qs %}
+    <li>{{ org.name }} - {{ org.sector }}|</li>
+  {% endfor %}
+  </ul>
+{% endblock content %}

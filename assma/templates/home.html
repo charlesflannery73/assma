@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>Home Page</h1>
+    <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'org-list' %}">List Organisations</a>
+    <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'org-create' %}">Add new Organisation</a>
+    <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'org-search' %}">Search Organisation</a>
+    <br>
+    <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'asset-list' %}">List Assets</a>
+    <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'asset-create' %}">Add new Asset</a>
+{% endblock content %}

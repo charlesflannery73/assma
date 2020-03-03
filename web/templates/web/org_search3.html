@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <h1>Org Search</h1>
+    <form action="/org/search3/" method="get">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <input type="text" name="q" value="{{ request.GET.q }} " placeholder="search..">
+        <input type="submit" value="OK">
+    </form>
+
+{% endblock content %}
