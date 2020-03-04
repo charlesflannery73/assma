@@ -5,24 +5,26 @@ from django.db import models
 from django.urls import reverse
 
 
+class Sector(models.Model):
+    sector = models.CharField(max_length=255, null=False)
+
+    def __str__(self):
+        return self.sector
+
+
+class Level(models.Model):
+    level = models.CharField(max_length=255, null=False)
+
+    def __str__(self):
+        return self.level
+
+
 class Org(models.Model):
-    sector_enum = (
-        (1, "Unknown"),
-        (2, "Financial"),
-        (3, "Government"),
-        (4, "Energy"),
-        (5, "Education"),
-    )
-    level_enum = (
-        (1, 'Unknown'),
-        (2, 'State'),
-        (3, 'Federal'),
-    )
 
     name = models.CharField(max_length=255, null=False)
-    sector = models.IntegerField(choices=sector_enum, default=1)
-    level = models.IntegerField(choices=level_enum, default=1)
-    tier = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(6)], default=6)
+    sector = models.ForeignKey(Sector, on_delete=models.CASCADE)
+    level = models.ForeignKey(Level, on_delete=models.CASCADE)
+    tier = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)], default=5)
     comment = models.TextField()
     created = models.DateTimeField(default=timezone.now)
     modified = models.DateTimeField(default=timezone.now)
