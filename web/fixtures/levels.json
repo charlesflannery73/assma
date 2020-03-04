@@ -1,0 +1,86 @@
+[
+   {
+      "pk" : 0,
+      "model" : "web.Sector",
+      "fields" : {
+         "sector" : "Energy, Utilities, Agriculture"
+      }
+   },
+   {
+      "pk" : 1,
+      "model" : "web.Sector",
+      "fields" : {
+         "sector" : "Safety and Security"
+      }
+   },
+   {
+      "pk" : 2,
+      "model" : "web.Sector",
+      "fields" : {
+         "sector" : "Defense and Intelligence"
+      }
+   },
+    {
+      "pk" : 3,
+      "model" : "web.Sector",
+      "fields" : {
+         "sector" : "ICT"
+      }
+   },
+       {
+      "pk" : 4,
+      "model" : "web.Sector",
+      "fields" : {
+         "sector" : "Transportation"
+      }
+   },
+   {
+      "pk" : 5,
+      "model" : "web.Sector",
+      "fields" : {
+         "sector" : "Government Administration"
+      }
+   },
+   {
+      "pk" : 6,
+      "model" : "web.Sector",
+      "fields" : {
+         "sector" : "Education"
+      }
+   },
+   {
+      "pk" : 7,
+      "model" : "web.Sector",
+      "fields" : {
+         "sector" : "Media, Entertainment"
+      }
+   },
+   {
+      "pk" : 8,
+      "model" : "web.Sector",
+      "fields" : {
+         "sector" : "Finance and Economy"
+      }
+   },
+   {
+      "pk" : 9,
+      "model" : "web.Sector",
+      "fields" : {
+         "sector" : "Special"
+      }
+   },
+   {
+      "pk" : 10,
+      "model" : "web.Sector",
+      "fields" : {
+         "sector" : "Healthcare"
+      }
+   },
+   {
+      "pk" : 11,
+      "model" : "web.Sector",
+      "fields" : {
+         "sector" : "Manufacturing, Construction"
+      }
+   }
+]
