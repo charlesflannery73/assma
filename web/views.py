@@ -1,8 +1,8 @@
 from django.shortcuts import render
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Org, Asset
-from .forms import OrgSearchForm
+from .forms import OrgSearchForm, AssetSearchForm
 from search_views.search import SearchListView
 from search_views.filters import BaseFilter
 
@@ -10,13 +10,35 @@ def home(request):
     return render(request, 'home.html', {'title': 'Home'})
 
 
+class AssetFilter(BaseFilter):
+    search_fields = {
+        'search_text': ['name'],
+        'search_org': ['org__name'],
+        'search_type': ['type'],
+        'search_comment': ['comment'],
+    }
+
+
+class AssetSearchList(SearchListView):
+    # regular django.views.generic.list.ListView configuration
+    model = Asset
+    paginate_by = 5
+    template_name = "web/asset_search_result.html"
+    ordering = ['name']
+
+    # additional configuration for SearchListView
+    form_class = AssetSearchForm
+    filter_class = AssetFilter
+
+
 class OrgFilter(BaseFilter):
     search_fields = {
-        'search_text': ['name', 'name'],
-        'search_sector': ['sector', 'sector'],
-        'search_level': ['level', 'level'],
-        'search_tier': ['tier', 'tier'],
-        'search_comment': ['comment', 'comment'],
+        'search_text': ['name'],
+        'search_sector': ['sector__sector'],
+        'search_level': ['level__level'],
+        'search_tier': ['tier'],
+        'search_id': ['id'],
+        'search_comment': ['comment'],
     }
 
 
@@ -52,7 +74,7 @@ class OrgCreateView(LoginRequiredMixin, CreateView):
         form.instance.author = self.request.user
         return super().form_valid(form)
 
-class OrgUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+class OrgUpdateView(LoginRequiredMixin, UpdateView):
     model = Org
     fields = ['name', 'sector', 'level', 'tier', 'comment']
 
@@ -60,22 +82,11 @@ class OrgUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         form.instance.author = self.request.user
         return super().form_valid(form)
 
-    def test_func(self):
-        org = self.get_object()
-        if self.request.user == org.author:
-            return True
-        return False
 
-
-class OrgDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+class OrgDeleteView(LoginRequiredMixin, DeleteView):
     model = Org
     success_url = '/'
 
-    def test_func(self):
-        org = self.get_object()
-        if self.request.user == org.author:
-            return True
-        return False
 
 class AssetListView(ListView):       # <app>/<model>_<viewtype>.html
     model = Asset
@@ -95,7 +106,7 @@ class AssetCreateView(LoginRequiredMixin, CreateView):
 class AssetDetailView(DetailView):
     model = Asset
 
-class AssetUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+class AssetUpdateView(LoginRequiredMixin, UpdateView):
     model = Asset
     fields = ['name', 'org', 'type', 'comment']
 
@@ -103,22 +114,10 @@ class AssetUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         form.instance.author = self.request.user
         return super().form_valid(form)
 
-    def test_func(self):
-        asset = self.get_object()
-        if self.request.user == asset.author:
-            return True
-        return False
 
-class AssetDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+class AssetDeleteView(LoginRequiredMixin, DeleteView):
     model = Asset
     success_url = '/'
-
-
-    def test_func(self):
-        org = self.get_object()
-        if self.request.user == Asset.author:
-            return True
-        return False
 
 
 def about(request):

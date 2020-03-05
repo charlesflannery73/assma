@@ -13,6 +13,7 @@ from .views import (
     AssetUpdateView,
     AssetDeleteView,
     OrgSearchList,
+    AssetSearchList
 )
 from . import views
 
@@ -25,6 +26,7 @@ urlpatterns = [
     path('org/<int:pk>/update/', OrgUpdateView.as_view(), name='org-update'),
     path('org/<int:pk>/delete/', OrgDeleteView.as_view(), name='org-delete'),
     path('asset/', AssetListView.as_view(), name='asset-list'),
+    path('asset/search/', AssetSearchList.as_view(), name='asset-search'),
     path('asset/<int:pk>/', AssetDetailView.as_view(), name='asset-detail'),
     path('asset/new/', AssetCreateView.as_view(), name='asset-create'),
     path('asset/<int:pk>/update/', AssetUpdateView.as_view(), name='asset-update'),

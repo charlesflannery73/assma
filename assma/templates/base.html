@@ -21,7 +21,7 @@
 <body>
     <header class="site-header">
       <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
-        <div class="container">
+        <div class="container-fluid">
             <!--
           <a class="navbar-brand mr-4" href="{% url 'assma-home' %}">Assma</--a>
           -->
@@ -32,8 +32,10 @@
             <div class="navbar-nav mr-auto">
               <a class="nav-item nav-link" href="{% url 'assma-home' %}">Home</a>
               <a class="nav-item nav-link" href="{% url 'assma-about' %}">About</a>
+              {% if user.is_authenticated %}
               <a class="nav-item nav-link" href="/admin/">Admin</a>
-            </div>
+              {% endif %}
+           </div>
             <!-- Navbar Right Side -->
             <div class="navbar-nav">
               {% if user.is_authenticated %}
@@ -50,9 +52,22 @@
         </div>
       </nav>
     </header>
-    <main role="main" class="container">
+    <main role="main" class="container-fluid">
       <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-2">
+          <div class="content-section">
+            <h3>Sidebar</h3>
+            <p class='text-muted'>Todo - Add quick links and quick searches
+              <ul class="list-group">
+                <li class="list-group-item list-group-item-light">Search Orgs</li>
+                <li class="list-group-item list-group-item-light">Search Assets</li>
+                <li class="list-group-item list-group-item-light">Search all</li>
+              </ul>
+            </p>
+          </div>
+        </div>
+
+        <div class="col-md-10">
           {% if messages %}
             {% for message in messages %}
               <div class="alert alert-{{ message.tags }}">
@@ -62,19 +77,8 @@
           {% endif %}
           {% block content %}{% endblock %}
         </div>
-        <div class="col-md-4">
-          <div class="content-section">
-            <h3>Our Sidebar</h3>
-            <p class='text-muted'>You can put any information here you'd like.
-              <ul class="list-group">
-                <li class="list-group-item list-group-item-light">Latest Posts</li>
-                <li class="list-group-item list-group-item-light">Announcements</li>
-                <li class="list-group-item list-group-item-light">Calendars</li>
-                <li class="list-group-item list-group-item-light">etc</li>
-              </ul>
-            </p>
-          </div>
-        </div>
+
+
       </div>
     </main>
 

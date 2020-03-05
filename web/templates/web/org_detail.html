@@ -6,12 +6,12 @@
       <div class="article-metadata">
         <a class="mr-2" href="#">author={{ object.author }}</a>
         <small class="text-muted">{{ object.created|date:"F d, Y" }}</small>
-        {% if object.author == user %}
+        <!-- {% if object.author == user %} -->
           <div>
             <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'org-update' object.id %}">Update</a>
             <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'org-delete' object.id %}">Delete</a>
           </div>
-        {% endif %}
+        <!-- {% endif %}  -->
       </div>
       <h2 class="article-title">name={{ object.name }}</h2>
       <p class="article-content">comment={{ object.comment }}</p>

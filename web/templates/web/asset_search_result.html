@@ -2,7 +2,7 @@
 {% load crispy_forms_tags %}
 {% block content%}
 <div class="container">
-    <h2>Org Search</h2>
+    <h2>Asset Search</h2>
     <form class="form-group col-sm-2 col-md-10" action="" method="GET">
         {{ form|crispy }}
         <button class="btn btn-outline-info" type="submit">Search</button>
@@ -12,10 +12,8 @@
     <table class="table table-bordered table-condensed">
         <tr>
             <th>Name</th>
-            <th>Sector</th>
-            <th>Level</th>
-            <th>Tier</th>
-            <th>coid</th>
+            <th>Org</th>
+            <th>Type</th>
             <th>Comment</th>
             <th>Created</th>
             <th>Modified</th>
@@ -27,18 +25,16 @@
         {% for object in object_list %}
         <tr>
             <td>{{object.name}}</td>
-            <td>{{object.sector}}</td>
-            <td>{{object.level}}</td>
-            <td>{{object.tier}}</td>
-            <td>{{object.id}}</td>
             <td>{{object.comment}}</td>
+            <td>{{object.org}}</td>
+            <td>{{object.type}}</td>
             <td>{{object.created|date:"Y-m-d H:i:s"}}</td>
             <td>{{object.modified|date:"Y-m-d H:i:s"}}</td>
             <td>{{object.author}}</td>
             {% if user.is_authenticated %}
-            <td><a href="{% url 'org-update' object.id %}">update</a>
+            <td><a href="{% url 'asset-update' object.id %}">update</a>
                 <br>
-                <a href="{% url 'org-delete' object.id %}">delete</a>
+                <a href="{% url 'asset-delete' object.id %}">delete</a>
             </td>
             {% endif %}
         </tr>
