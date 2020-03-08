@@ -1,3 +1,4 @@
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
@@ -5,6 +6,7 @@ from .models import Org, Asset
 from .forms import OrgSearchForm, AssetSearchForm
 from search_views.search import SearchListView
 from search_views.filters import BaseFilter
+
 
 def home(request):
     return render(request, 'home.html', {'title': 'Home'})
@@ -42,8 +44,19 @@ class OrgFilter(BaseFilter):
     }
 
 
+class OrgSearch(SearchListView):
+    model = Org
+    template_name = "web/org_search.html"
+    form_class = OrgSearchForm
+    filter_class = OrgFilter
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            return HttpResponseRedirect('org-list', Org)
+        return render(request, "web/org_search.html")
+
 class OrgSearchList(SearchListView):
-    # regular django.views.generic.list.ListView configuration
     model = Org
     paginate_by = 5
     template_name = "web/org_search_result.html"
@@ -53,10 +66,20 @@ class OrgSearchList(SearchListView):
     form_class = OrgSearchForm
     filter_class = OrgFilter
 
+    def get(self, request, *args, **kwargs):
+        form = self.form_class(initial=self.initial)
+        return render(request, "web/org_search.html", {'form': form})
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            return render(request, "web/org_list2.html", Org)
+        return render(request, "web/org_search.html")
+
 
 class OrgListView(ListView):       # <app>/<model>_<viewtype>.html
     model = Org
-    template_name = 'org_list.html'
+    template_name = 'web/org_list2.html'
     context_object_name = 'orgs'
     ordering = ['-modified']
     paginate_by = 5
@@ -73,6 +96,7 @@ class OrgCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
+
 
 class OrgUpdateView(LoginRequiredMixin, UpdateView):
     model = Org
@@ -95,6 +119,7 @@ class AssetListView(ListView):       # <app>/<model>_<viewtype>.html
     ordering = ['-modified']
     paginate_by = 5
 
+
 class AssetCreateView(LoginRequiredMixin, CreateView):
     model = Asset
     fields = ['name', 'org', 'type', 'comment']
@@ -103,8 +128,10 @@ class AssetCreateView(LoginRequiredMixin, CreateView):
         form.instance.author = self.request.user
         return super().form_valid(form)
 
+
 class AssetDetailView(DetailView):
     model = Asset
+
 
 class AssetUpdateView(LoginRequiredMixin, UpdateView):
     model = Asset

@@ -1,0 +1,58 @@
+[
+   {
+      "pk" : 0,
+      "model" : "web.AssetType",
+      "fields" : {
+         "type" : "domain"
+      }
+   },
+   {
+      "pk" : 1,
+      "model" : "web.AssetType",
+      "fields" : {
+         "type" : "ip4"
+      }
+   },
+   {
+      "pk" : 2,
+      "model" : "web.AssetType",
+      "fields" : {
+         "type" : "range4"
+      }
+   },
+   {
+      "pk" : 3,
+      "model" : "web.AssetType",
+      "fields" : {
+         "type" : "mask4"
+      }
+   },
+   {
+      "pk" : 4,
+      "model" : "web.AssetType",
+      "fields" : {
+         "type" : "cidr4"
+      }
+   },
+   {
+      "pk" : 5,
+      "model" : "web.AssetType",
+      "fields" : {
+         "type" : "range6"
+      }
+   },
+   {
+      "pk" : 6,
+      "model" : "web.AssetType",
+      "fields" : {
+         "type" : "mask6"
+      }
+   },
+   {
+      "pk" : 7,
+      "model" : "web.AssetType",
+      "fields" : {
+         "type" : "cidr6"
+      }
+   }
+]

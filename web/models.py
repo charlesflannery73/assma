@@ -37,21 +37,17 @@ class Org(models.Model):
         return reverse('org-detail', kwargs={'pk': self.pk})
 
 
-class Asset(models.Model):
-    type_enum = (
-        (1, 'domain'),
-        (2, 'ip4'),
-        (3, 'range4'),
-        (4, 'mask4'),
-        (5, 'cidr4'),
-        (6, 'range6'),
-        (7, 'mask6'),
-        (8, 'cidr6'),
-    )
+class AssetType(models.Model):
+    type = models.CharField(max_length=255, null=False)
 
+    def __str__(self):
+        return self.type
+
+
+class Asset(models.Model):
     name = models.CharField(max_length=255, null=False)
     org = models.ForeignKey(Org, on_delete=models.CASCADE)
-    type = models.IntegerField(choices=type_enum, null=False)
+    type = models.ForeignKey(AssetType, on_delete=models.CASCADE)
     comment = models.TextField()
     created = models.DateTimeField(default=timezone.now)
     modified = models.DateTimeField(default=timezone.now)

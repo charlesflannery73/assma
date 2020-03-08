@@ -11,6 +11,9 @@ def load_sectors(apps, schema_editor):
 def load_levels(apps, schema_editor):
     call_command("loaddata", "levels.json")
 
+def load_asset_types(apps, schema_editor):
+    call_command("loaddata", "types.json")
+
 
 class Migration(migrations.Migration):
 
@@ -21,4 +24,5 @@ class Migration(migrations.Migration):
     operations = [
         migrations.RunPython(load_sectors),
         migrations.RunPython(load_levels),
+        migrations.RunPython(load_asset_types),
     ]
