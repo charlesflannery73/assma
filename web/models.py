@@ -26,8 +26,8 @@ class Org(models.Model):
     level = models.ForeignKey(Level, on_delete=models.CASCADE)
     tier = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)], default=5)
     comment = models.TextField()
-    created = models.DateTimeField(default=timezone.now)
-    modified = models.DateTimeField(default=timezone.now)
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -49,8 +49,8 @@ class Asset(models.Model):
     org = models.ForeignKey(Org, on_delete=models.CASCADE)
     type = models.ForeignKey(AssetType, on_delete=models.CASCADE)
     comment = models.TextField()
-    created = models.DateTimeField(default=timezone.now)
-    modified = models.DateTimeField(default=timezone.now)
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):

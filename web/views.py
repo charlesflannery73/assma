@@ -15,37 +15,18 @@ def home(request):
     return render(request, 'home.html', {'title': 'Home'})
 
 
+def about(request):
+    return render(request, 'about.html', {'title': 'About'})
+
+
 class AssetFilter(BaseFilter):
     search_fields = {
         'search_text': ['name'],
         'search_org': ['org__name'],
-        'search_type': ['type'],
+        'search_type': ['assettype__type'],
         'search_comment': ['comment'],
     }
 
-
-class AssetSearchList(SearchListView):
-    # regular django.views.generic.list.ListView configuration
-    model = Asset
-    paginate_by = 5
-    template_name = "web/asset_search_result.html"
-    ordering = ['name']
-
-    # additional configuration for SearchListView
-    form_class = AssetSearchForm
-    filter_class = AssetFilter
-
-
-class OrgFilter2(django_filters.FilterSet):
-    class Meta:
-        model = Org
-        fields = ['name', 'sector', 'level', 'tier', 'id', 'comment',]
-
-
-def OrgSearch2(request):
-    org_list = Org.objects.all()
-    org_filter = OrgFilter2(request.GET, queryset=org_list)
-    return render(request, "web/org_search2.html", {'filter': org_filter})
 
 class OrgFilter(BaseFilter):
     search_fields = {
@@ -56,6 +37,26 @@ class OrgFilter(BaseFilter):
         'search_id': ['id'],
         'search_comment': ['comment'],
     }
+
+class AssetSearch(SearchListView):
+    model = Asset
+    template_name = "web/asset_search.html"
+    ordering = ['name']
+    form_class = AssetSearchForm
+    filter_class = AssetFilter
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            name = form.cleaned_data['search_text']
+            org = form.cleaned_data['search_org']
+            type = form.cleaned_data['search_type']
+            comment = form.cleaned_data['search_comment']
+            params = "name=" + name + "&org=" + org + "&type=" + type + "&comment=" + comment
+            return HttpResponseRedirect(reverse('asset-list') +'?%s' % params)
+
+        return render(request, self.template_name, {'form': form})
+
 
 
 class OrgSearch(SearchListView):
@@ -68,7 +69,6 @@ class OrgSearch(SearchListView):
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
         if form.is_valid():
-            # <process form cleaned data>
             name = form.cleaned_data['search_text']
             sector = form.cleaned_data['search_sector']
             level = form.cleaned_data['search_level']
@@ -80,17 +80,17 @@ class OrgSearch(SearchListView):
                 coid = ""
             comment = form.cleaned_data['search_comment']
             params = "name=" + name + "&sector=" + sector + "&level=" + level + "&comment=" + comment + "&tier=" + str(tier) + "&coid=" + str(coid)
-            return HttpResponseRedirect('/org/?%s' % params)
+            return HttpResponseRedirect(reverse('org-list') +'?%s' % params)
 
         return render(request, self.template_name, {'form': form})
 
 
 class OrgListView(ListView):       # <app>/<model>_<viewtype>.html
     model = Org
-    template_name = 'web/org_list2.html'
+    template_name = 'web/org_list.html'
     context_object_name = 'orgs'
     ordering = ['-modified']
-    paginate_by = 5
+    paginate_by = 10
 
     def get_queryset(self):
         if self.request.GET.get('name') == None:
@@ -101,7 +101,6 @@ class OrgListView(ListView):       # <app>/<model>_<viewtype>.html
         tier_val = self.request.GET.get('tier')
         id_val = self.request.GET.get('coid')
         comment_val = self.request.GET.get('comment')
-#        new_context = Org.objects.filter((name__icontains=name_val) | (sector__icontains=sector_val))
         new_context = Org.objects.filter(
             Q(name__icontains=name_val) &
             Q(sector__sector__icontains=sector_val) &
@@ -142,11 +141,25 @@ class OrgDeleteView(LoginRequiredMixin, DeleteView):
 
 class AssetListView(ListView):       # <app>/<model>_<viewtype>.html
     model = Asset
-    template_name = 'asset_list.html'
+    template_name = 'web/asset_list.html'
     context_object_name = 'assets'
     ordering = ['-modified']
-    paginate_by = 5
+    paginate_by = 10
 
+    def get_queryset(self):
+        if self.request.GET.get('name') == None:
+            return Asset.objects.all()
+        name_val = self.request.GET.get('name')
+        org_val = self.request.GET.get('org')
+        type_val = self.request.GET.get('type')
+        comment_val = self.request.GET.get('comment')
+        new_context = Asset.objects.filter(
+            Q(name__icontains=name_val) &
+            Q(org__name__icontains=org_val) &
+            Q(type__type__icontains=type_val) &
+            Q(comment__icontains=comment_val)
+        )
+        return new_context
 
 class AssetCreateView(LoginRequiredMixin, CreateView):
     model = Asset
@@ -173,8 +186,4 @@ class AssetUpdateView(LoginRequiredMixin, UpdateView):
 class AssetDeleteView(LoginRequiredMixin, DeleteView):
     model = Asset
     success_url = '/'
-
-
-def about(request):
-    return render(request, 'about.html', {'title': 'About'})
 

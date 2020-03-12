@@ -56,14 +56,16 @@
       <div class="row">
         <div class="col-md-2">
           <div class="content-section">
-            <h3>Sidebar</h3>
-            <p class='text-muted'>Todo - Add quick links and quick searches
+            <h3>Assma</h3>
+            <p class='text-muted'>Quick links
               <ul class="list-group">
+                <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'org-list' %}">List Organisations</a>
                 <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'org-search' %}">Search Organisation</a>
+                <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'org-create' %}">Add new Organisation</a>
+                <br>
+                <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'asset-list' %}">List Assets</a>
                 <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'asset-search' %}">Search Asset</a>
-                <li class="list-group-item list-group-item-light">Search Orgs</li>
-                <li class="list-group-item list-group-item-light">Search Assets</li>
-                <li class="list-group-item list-group-item-light">Search all</li>
+                <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'asset-create' %}">Add new Asset</a>
               </ul>
             </p>
           </div>
