@@ -2,7 +2,7 @@ import django_filters
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import View, ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Org, Asset
 from .forms import OrgSearchForm, AssetSearchForm
 from search_views.search import SearchListView
@@ -11,8 +11,11 @@ from django.db.models import Q
 from django.urls import reverse
 
 
-def home(request):
-    return render(request, 'home.html', {'title': 'Home'})
+class HomeView(View):
+    def get(self, request, *args, **kwargs):
+        orgs = Org.objects.filter().order_by('-modified')[:3]
+        assets = Asset.objects.filter().order_by('-modified')[:3]
+        return render(request, 'home.html', {'orgs': orgs, 'assets': assets})
 
 
 def about(request):
@@ -41,9 +44,9 @@ class OrgFilter(BaseFilter):
 class AssetSearch(SearchListView):
     model = Asset
     template_name = "web/asset_search.html"
-    ordering = ['name']
     form_class = AssetSearchForm
     filter_class = AssetFilter
+    ordering = ['name']
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
@@ -56,7 +59,6 @@ class AssetSearch(SearchListView):
             return HttpResponseRedirect(reverse('asset-list') +'?%s' % params)
 
         return render(request, self.template_name, {'form': form})
-
 
 
 class OrgSearch(SearchListView):
@@ -89,12 +91,11 @@ class OrgListView(ListView):       # <app>/<model>_<viewtype>.html
     model = Org
     template_name = 'web/org_list.html'
     context_object_name = 'orgs'
-    ordering = ['-modified']
     paginate_by = 10
 
     def get_queryset(self):
         if self.request.GET.get('name') == None:
-            return Org.objects.all()
+            return Org.objects.filter().order_by('name')
         name_val = self.request.GET.get('name')
         sector_val = self.request.GET.get('sector')
         level_val = self.request.GET.get('level')
@@ -108,7 +109,7 @@ class OrgListView(ListView):       # <app>/<model>_<viewtype>.html
             Q(tier__icontains=tier_val) &
             Q(id__icontains=id_val) &
             Q(comment__icontains=comment_val)
-        )
+        ).order_by('name')
         return new_context
 
 
@@ -119,6 +120,7 @@ class OrgDetailView(DetailView):
 class OrgCreateView(LoginRequiredMixin, CreateView):
     model = Org
     fields = ['name', 'sector', 'level', 'tier', 'comment']
+    success_url = '/'
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -128,6 +130,7 @@ class OrgCreateView(LoginRequiredMixin, CreateView):
 class OrgUpdateView(LoginRequiredMixin, UpdateView):
     model = Org
     fields = ['name', 'sector', 'level', 'tier', 'comment']
+    success_url = '/'
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -148,7 +151,7 @@ class AssetListView(ListView):       # <app>/<model>_<viewtype>.html
 
     def get_queryset(self):
         if self.request.GET.get('name') == None:
-            return Asset.objects.all()
+            return Asset.objects.filter().order_by('name')
         name_val = self.request.GET.get('name')
         org_val = self.request.GET.get('org')
         type_val = self.request.GET.get('type')
@@ -158,12 +161,13 @@ class AssetListView(ListView):       # <app>/<model>_<viewtype>.html
             Q(org__name__icontains=org_val) &
             Q(type__type__icontains=type_val) &
             Q(comment__icontains=comment_val)
-        )
+        ).order_by('name')
         return new_context
 
 class AssetCreateView(LoginRequiredMixin, CreateView):
     model = Asset
     fields = ['name', 'org', 'type', 'comment']
+    success_url = '/'
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -177,6 +181,7 @@ class AssetDetailView(DetailView):
 class AssetUpdateView(LoginRequiredMixin, UpdateView):
     model = Asset
     fields = ['name', 'org', 'type', 'comment']
+    success_url = '/'
 
     def form_valid(self, form):
         form.instance.author = self.request.user

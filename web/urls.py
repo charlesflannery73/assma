@@ -14,11 +14,12 @@ from .views import (
     AssetUpdateView,
     AssetDeleteView,
     AssetSearch,
+    HomeView,
 )
 from . import views
 
 urlpatterns = [
-    path('', views.home, name='assma-home'),
+    path('', HomeView.as_view(), name='assma-home'),
     path('org/search', OrgSearch.as_view(), name='org-search'),
     path('org', OrgListView.as_view(), name='org-list'),
     path('org/<int:pk>', OrgDetailView.as_view(), name='org-detail'),

@@ -39,8 +39,6 @@
             <!-- Navbar Right Side -->
             <div class="navbar-nav">
               {% if user.is_authenticated %}
-                <a class="nav-item nav-link" href="{% url 'asset-create' %}">New Asset</a>
-                <a class="nav-item nav-link" href="{% url 'org-create' %}">New Org</a>
                 <a class="nav-item nav-link" href="{% url 'profile' %}">Profile</a>
                 <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
               {% else %}
@@ -59,9 +57,9 @@
             <h3>Assma</h3>
             <p class='text-muted'>Quick links
               <ul class="list-group">
-                <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'org-list' %}">List Organisations</a>
-                <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'org-search' %}">Search Organisation</a>
-                <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'org-create' %}">Add new Organisation</a>
+                <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'org-list' %}">List Orgs</a>
+                <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'org-search' %}">Search Orgs</a>
+                <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'org-create' %}">New Org</a>
                 <br>
                 <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'asset-list' %}">List Assets</a>
                 <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'asset-search' %}">Search Asset</a>

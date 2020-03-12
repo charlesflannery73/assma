@@ -1,11 +1,74 @@
 {% extends "base.html" %}
 {% block content %}
-    <h1>Assma Home Page</h1>
-    <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'org-list' %}">List Organisations</a>
-    <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'org-create' %}">Add new Organisation</a>
-    <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'org-search' %}">Search Organisation</a>
-    <br>
-    <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'asset-list' %}">List Assets</a>
-    <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'asset-create' %}">Add new Asset</a>
-    <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'asset-search' %}">Search Assets</a>
+    <h1>Recent Org updates</h1>
+    <table class="table table-bordered table-condensed">
+        <tr>
+            <th>Name</th>
+            <th>Sector</th>
+            <th>Level</th>
+            <th>Tier</th>
+            <th>coid</th>
+            <th>Comment</th>
+            <th>Created</th>
+            <th>Modified</th>
+            <th>Edited by</th>
+            {% if user.is_authenticated %}
+            <th>Modify</th>
+            {% endif %}
+        </tr>
+        {% for org in orgs %}
+        <tr>
+            <td>{{org.name}}</td>
+            <td>{{org.sector}}</td>
+            <td>{{org.level}}</td>
+            <td>{{org.tier}}</td>
+            <td>{{org.id}}</td>
+            <td>{{org.comment}}</td>
+            <td>{{org.created|date:"Y-m-d H:i:s"}}</td>
+            <td>{{org.modified|date:"Y-m-d H:i:s"}}</td>
+            <td>{{org.author}}</td>
+            {% if user.is_authenticated %}
+            <td><a href="{% url 'org-update' org.id %}">update</a>
+                <br>
+                <a href="{% url 'org-delete' org.id %}">delete</a>
+            </td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+
+    </table>
+<br>
+    <h1>Recent Asset updates</h1>
+    <table class="table table-bordered table-condensed">
+        <tr>
+            <th>Name</th>
+            <th>Org</th>
+            <th>Type</th>
+            <th>Comment</th>
+            <th>Created</th>
+            <th>Modified</th>
+            <th>Edited by</th>
+            {% if user.is_authenticated %}
+            <th>Modify</th>
+            {% endif %}
+        </tr>
+        {% for asset in assets %}
+        <tr>
+            <td>{{asset.name}}</td>
+            <td>{{asset.org}}</td>
+            <td>{{asset.type}}</td>
+            <td>{{asset.comment}}</td>
+            <td>{{asset.created|date:"Y-m-d H:i:s"}}</td>
+            <td>{{asset.modified|date:"Y-m-d H:i:s"}}</td>
+            <td>{{asset.author}}</td>
+            {% if user.is_authenticated %}
+            <td><a href="{% url 'asset-update' asset.id %}">update</a>
+                <br>
+                <a href="{% url 'asset-delete' asset.id %}">delete</a>
+            </td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+
+    </table>
 {% endblock content %}
