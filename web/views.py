@@ -1,11 +1,14 @@
+import django_filters
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Org, Asset
 from .forms import OrgSearchForm, AssetSearchForm
 from search_views.search import SearchListView
 from search_views.filters import BaseFilter
+from django.db.models import Q
+from django.urls import reverse
 
 
 def home(request):
@@ -33,6 +36,17 @@ class AssetSearchList(SearchListView):
     filter_class = AssetFilter
 
 
+class OrgFilter2(django_filters.FilterSet):
+    class Meta:
+        model = Org
+        fields = ['name', 'sector', 'level', 'tier', 'id', 'comment',]
+
+
+def OrgSearch2(request):
+    org_list = Org.objects.all()
+    org_filter = OrgFilter2(request.GET, queryset=org_list)
+    return render(request, "web/org_search2.html", {'filter': org_filter})
+
 class OrgFilter(BaseFilter):
     search_fields = {
         'search_text': ['name'],
@@ -49,32 +63,26 @@ class OrgSearch(SearchListView):
     template_name = "web/org_search.html"
     form_class = OrgSearchForm
     filter_class = OrgFilter
-
-    def post(self, request, *args, **kwargs):
-        form = self.form_class(request.POST)
-        if form.is_valid():
-            return HttpResponseRedirect('org-list', Org)
-        return render(request, "web/org_search.html")
-
-class OrgSearchList(SearchListView):
-    model = Org
-    paginate_by = 5
-    template_name = "web/org_search_result.html"
     ordering = ['name']
 
-    # additional configuration for SearchListView
-    form_class = OrgSearchForm
-    filter_class = OrgFilter
-
-    def get(self, request, *args, **kwargs):
-        form = self.form_class(initial=self.initial)
-        return render(request, "web/org_search.html", {'form': form})
-
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
         if form.is_valid():
-            return render(request, "web/org_list2.html", Org)
-        return render(request, "web/org_search.html")
+            # <process form cleaned data>
+            name = form.cleaned_data['search_text']
+            sector = form.cleaned_data['search_sector']
+            level = form.cleaned_data['search_level']
+            tier = form.cleaned_data['search_tier']
+            if tier == None:
+                tier = ""
+            coid = form.cleaned_data['search_id']
+            if coid == None:
+                coid = ""
+            comment = form.cleaned_data['search_comment']
+            params = "name=" + name + "&sector=" + sector + "&level=" + level + "&comment=" + comment + "&tier=" + str(tier) + "&coid=" + str(coid)
+            return HttpResponseRedirect('/org/?%s' % params)
+
+        return render(request, self.template_name, {'form': form})
 
 
 class OrgListView(ListView):       # <app>/<model>_<viewtype>.html
@@ -83,6 +91,26 @@ class OrgListView(ListView):       # <app>/<model>_<viewtype>.html
     context_object_name = 'orgs'
     ordering = ['-modified']
     paginate_by = 5
+
+    def get_queryset(self):
+        if self.request.GET.get('name') == None:
+            return Org.objects.all()
+        name_val = self.request.GET.get('name')
+        sector_val = self.request.GET.get('sector')
+        level_val = self.request.GET.get('level')
+        tier_val = self.request.GET.get('tier')
+        id_val = self.request.GET.get('coid')
+        comment_val = self.request.GET.get('comment')
+#        new_context = Org.objects.filter((name__icontains=name_val) | (sector__icontains=sector_val))
+        new_context = Org.objects.filter(
+            Q(name__icontains=name_val) &
+            Q(sector__sector__icontains=sector_val) &
+            Q(level__level__icontains=level_val) &
+            Q(tier__icontains=tier_val) &
+            Q(id__icontains=id_val) &
+            Q(comment__icontains=comment_val)
+        )
+        return new_context
 
 
 class OrgDetailView(DetailView):

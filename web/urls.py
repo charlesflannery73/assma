@@ -12,7 +12,6 @@ from .views import (
     AssetCreateView,
     AssetUpdateView,
     AssetDeleteView,
-    #OrgSearchList,
     OrgSearch,
     AssetSearchList
 )
@@ -20,7 +19,6 @@ from . import views
 
 urlpatterns = [
     path('', views.home, name='assma-home'),
-    #path('org/search/', OrgSearchList.as_view(), name='org-search'),
     path('org/search/', OrgSearch.as_view(), name='org-search'),
     path('org/', OrgListView.as_view(), name='org-list'),
     path('org/<int:pk>/', OrgDetailView.as_view(), name='org-detail'),
@@ -34,6 +32,7 @@ urlpatterns = [
     path('asset/<int:pk>/update/', AssetUpdateView.as_view(), name='asset-update'),
     path('asset/<int:pk>/delete/', AssetDeleteView.as_view(), name='asset-delete'),
     path('about/', views.about, name='assma-about'),
+    path('org/search2/', views.OrgSearch2, name='assma-orgsearch2'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
