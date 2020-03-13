@@ -1,6 +1,5 @@
-import django_filters
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import View, ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Org, Asset
@@ -13,8 +12,8 @@ from django.urls import reverse
 
 class HomeView(View):
     def get(self, request, *args, **kwargs):
-        orgs = Org.objects.filter().order_by('-modified')[:3]
-        assets = Asset.objects.filter().order_by('-modified')[:3]
+        orgs = Org.objects.filter().order_by('-modified')[:5]
+        assets = Asset.objects.filter().order_by('-modified')[:5]
         return render(request, 'home.html', {'orgs': orgs, 'assets': assets})
 
 
@@ -137,7 +136,7 @@ class OrgUpdateView(LoginRequiredMixin, UpdateView):
         return super().form_valid(form)
 
 
-class OrgDeleteView(LoginRequiredMixin, DeleteView):
+class OrgDeleteView(LoginRequiredMixin, DeleteView, View):
     model = Org
     success_url = '/'
 

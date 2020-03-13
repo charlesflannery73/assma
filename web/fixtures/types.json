@@ -10,7 +10,7 @@
       "pk" : 1,
       "model" : "web.AssetType",
       "fields" : {
-         "type" : "ip4"
+         "type" : "ipv4"
       }
    },
    {
@@ -38,18 +38,24 @@
       "pk" : 5,
       "model" : "web.AssetType",
       "fields" : {
+         "type" : "ipv6"
+      }
+   },   {
+      "pk" : 6,
+      "model" : "web.AssetType",
+      "fields" : {
          "type" : "range6"
       }
    },
    {
-      "pk" : 6,
+      "pk" : 7,
       "model" : "web.AssetType",
       "fields" : {
          "type" : "mask6"
       }
    },
    {
-      "pk" : 7,
+      "pk" : 8,
       "model" : "web.AssetType",
       "fields" : {
          "type" : "cidr6"
