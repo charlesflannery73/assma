@@ -45,6 +45,7 @@ class AssetType(models.Model):
         return self.type
 
 
+# noinspection PyTypeChecker
 class Asset(models.Model):
     name = models.CharField(max_length=255, null=False, unique=True)
     org = models.ForeignKey(Org, on_delete=models.PROTECT)

@@ -42,7 +42,7 @@ class OrgFilter(BaseFilter):
 
 class AssetSearch(SearchListView):
     model = Asset
-    template_name = "web/asset_search.html"
+    template_name = "web/search.html"
     form_class = AssetSearchForm
     filter_class = AssetFilter
     ordering = ['name']
@@ -62,7 +62,7 @@ class AssetSearch(SearchListView):
 
 class OrgSearch(SearchListView):
     model = Org
-    template_name = "web/org_search.html"
+    template_name = "web/search.html"
     form_class = OrgSearchForm
     filter_class = OrgFilter
     ordering = ['name']
@@ -90,7 +90,7 @@ class OrgListView(ListView):       # <app>/<model>_<viewtype>.html
     model = Org
     template_name = 'web/org_list.html'
     context_object_name = 'orgs'
-    paginate_by = 10
+    paginate_by = 20
 
     def get_queryset(self):
         if self.request.GET.get('name') == None:
@@ -146,7 +146,7 @@ class AssetListView(ListView):       # <app>/<model>_<viewtype>.html
     template_name = 'web/asset_list.html'
     context_object_name = 'assets'
     ordering = ['-modified']
-    paginate_by = 10
+    paginate_by = 20
 
     def get_queryset(self):
         if self.request.GET.get('name') == None:

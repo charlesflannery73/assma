@@ -2,7 +2,7 @@
 {% load crispy_forms_tags %}
 {% block content%}
 <div class="container">
-    <h2>Org Search</h2>
+    <h2>Search</h2>
     <form class="form-group col-sm-2 col-md-10" action="" method="POST">
         {% csrf_token %}
         {{ form|crispy }}
