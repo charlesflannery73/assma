@@ -24,7 +24,7 @@
       "pk" : 3,
       "model" : "web.AssetType",
       "fields" : {
-         "type" : "mask4"
+         "type" : "netmask4"
       }
    },
    {
@@ -49,13 +49,6 @@
    },
    {
       "pk" : 7,
-      "model" : "web.AssetType",
-      "fields" : {
-         "type" : "mask6"
-      }
-   },
-   {
-      "pk" : 8,
       "model" : "web.AssetType",
       "fields" : {
          "type" : "cidr6"
