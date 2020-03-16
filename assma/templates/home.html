@@ -11,7 +11,6 @@
             <th>Comment</th>
             <th>Created</th>
             <th>Modified</th>
-            <th>Edited by</th>
             {% if user.is_authenticated %}
             <th>Modify</th>
             {% endif %}
@@ -26,7 +25,6 @@
             <td>{{org.comment}}</td>
             <td>{{org.created|date:"Y-m-d H:i:s"}}</td>
             <td>{{org.modified|date:"Y-m-d H:i:s"}}</td>
-            <td>{{org.author}}</td>
             {% if user.is_authenticated %}
             <td><a href="{% url 'org-update' org.id %}">update</a>
                 <a href="{% url 'org-delete' org.id %}">delete</a>
@@ -46,7 +44,6 @@
             <th>Comment</th>
             <th>Created</th>
             <th>Modified</th>
-            <th>Edited by</th>
             {% if user.is_authenticated %}
             <th>Modify</th>
             {% endif %}
@@ -59,7 +56,6 @@
             <td>{{asset.comment}}</td>
             <td>{{asset.created|date:"Y-m-d H:i:s"}}</td>
             <td>{{asset.modified|date:"Y-m-d H:i:s"}}</td>
-            <td>{{asset.author}}</td>
             {% if user.is_authenticated %}
             <td><a href="{% url 'asset-update' asset.id %}">update</a>
                 <a href="{% url 'asset-delete' asset.id %}">delete</a>

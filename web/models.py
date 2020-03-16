@@ -29,7 +29,7 @@ class Org(models.Model):
     comment = models.TextField(null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
-    author = models.ForeignKey(User, on_delete=models.PROTECT)
+    #author = models.ForeignKey(User, on_delete=models.PROTECT)
 
     def __str__(self):
         return self.name
@@ -53,7 +53,7 @@ class Asset(models.Model):
     comment = models.TextField(null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
-    author = models.ForeignKey(User, on_delete=models.PROTECT)
+    #author = models.ForeignKey(User, on_delete=models.PROTECT)
 
     def __str__(self):
         return self.name

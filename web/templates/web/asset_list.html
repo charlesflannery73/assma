@@ -11,7 +11,6 @@
             <th>Comment</th>
             <th>Created</th>
             <th>Modified</th>
-            <th>Edited by</th>
             {% if user.is_authenticated %}
             <th>Modify</th>
             {% endif %}
@@ -24,7 +23,6 @@
             <td>{{object.comment}}</td>
             <td>{{object.created|date:"Y-m-d H:i:s"}}</td>
             <td>{{object.modified|date:"Y-m-d H:i:s"}}</td>
-            <td>{{object.author}}</td>
             {% if user.is_authenticated %}
             <td><a href="{% url 'asset-update' object.id %}">update</a>
                 <a href="{% url 'asset-delete' object.id %}">delete</a>
