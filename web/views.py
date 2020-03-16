@@ -8,7 +8,6 @@ from search_views.search import SearchListView
 from search_views.filters import BaseFilter
 from django.db.models import Q
 from django.urls import reverse
-import whois
 
 
 class HomeView(View):
@@ -20,17 +19,6 @@ class HomeView(View):
 
 def about(request):
     return render(request, 'about.html', {'title': 'About'})
-
-
-def whois_local(request, *args, **kwargs):
-    ip = 'google.com'
-    result_dict = whois.query(ip)
-    return render(request, 'web/whois.html', {'whois': result_dict})
-
-
-def nslookup(request):
-    return render(request, 'about.html', {'title': 'nslookup'})
-
 
 
 class AssetFilter(BaseFilter):

@@ -14,7 +14,6 @@
             <th>Edited by</th>
             {% if user.is_authenticated %}
             <th>Modify</th>
-            <th>External Actions</th>
             {% endif %}
         </tr>
         {% for object in object_list %}
@@ -29,9 +28,6 @@
             {% if user.is_authenticated %}
             <td><a href="{% url 'asset-update' object.id %}">update</a>
                 <a href="{% url 'asset-delete' object.id %}">delete</a>
-            </td>
-            <td><a href="{% url 'asset-whois' object.id %}">whois</a>
-                <a href="{% url 'asset-nslookup' object.id %}">nslookup</a>
             </td>
             {% endif %}
         </tr>
