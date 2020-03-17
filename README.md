@@ -10,7 +10,7 @@ source .venv/bin/activate
 
 pip install -r requirements.txt
 
-if wanting to clean all and start again, start from here, if new install, skip this step
+ #if wanting to clean all and start again, start from here, if new install, skip this step
 
 rm -rf db.sqlite3 web/0*
 
