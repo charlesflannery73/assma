@@ -1,59 +1,89 @@
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator, MaxValueValidator
-from django.contrib.auth.models import User
 from django.db import models
 import ipaddress
 import re
 import validators
 
-class Sector(models.Model):
-    sector = models.CharField(max_length=255, null=False)
-
-    def __str__(self):
-        return self.sector
-
-
-class Level(models.Model):
-    level = models.CharField(max_length=255, null=False)
-
-    def __str__(self):
-        return self.level
-
 
 class Org(models.Model):
 
+    LEVEL_NATIONAL = 'National'
+    LEVEL_EMIRATE = 'Emirate'
+    LEVEL_OTHER = 'Other'
+    LEVEL = [
+        (LEVEL_NATIONAL, ('Federal / National level')),
+        (LEVEL_EMIRATE, ('Emirate level (Abu Dhabi, Dubai, Sharjah, etc)')),
+        (LEVEL_OTHER, ('Other level')),
+    ]
+
+    SECTOR_ENERGY = 'Energy, Utilities, Agriculture'
+    SECTOR_SECURITY = 'Safety and Security'
+    SECTOR_DEFENSE = 'Defense and Intelligence'
+    SECTOR_ICT = 'ICT'
+    SECTOR_TRANSPORTATION = 'Transportation'
+    SECTOR_ADMIN = 'Government Administration'
+    SECTOR_EDUCATION = 'Education'
+    SECTOR_MEDIA = 'Media, Entertainment'
+    SECTOR_FINANCE = 'Finance and Economy'
+    SECTOR_SPECIAL = 'Special'
+    SECTOR_HEALTH = 'Healthcare'
+    SECTOR_MANUFACTURING = 'Manufacturing, Construction'
+    SECTOR_OTHER = 'Other'
+    SECTOR = [
+        (SECTOR_ENERGY, ('Energy, Utilities, Agriculture')),
+        (SECTOR_SECURITY, ('Safety and Security')),
+        (SECTOR_DEFENSE, ('Defense and Intelligence')),
+        (SECTOR_ICT, ('ICT')),
+        (SECTOR_TRANSPORTATION, ('Transportation')),
+        (SECTOR_ADMIN, ('Government Administration')),
+        (SECTOR_EDUCATION, ('Education')),
+        (SECTOR_MEDIA, ('Media, Entertainment')),
+        (SECTOR_FINANCE, ('Finance and Economy')),
+        (SECTOR_SPECIAL, ('Special')),
+        (SECTOR_HEALTH, ('Healthcare')),
+        (SECTOR_MANUFACTURING, ('Manufacturing, Construction')),
+        (SECTOR_OTHER, ('Other')),
+    ]
+
     name = models.CharField(max_length=255, null=False, unique=True)
-    sector = models.ForeignKey(Sector, on_delete=models.PROTECT)
-    level = models.ForeignKey(Level, on_delete=models.PROTECT)
+    level = models.CharField(max_length=255, choices=LEVEL, default=LEVEL_OTHER)
+    sector = models.CharField(max_length=255, choices=SECTOR, default=SECTOR_OTHER)
     tier = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)], default=5)
     comment = models.TextField(null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
-    #author = models.ForeignKey(User, on_delete=models.PROTECT)
 
     def __str__(self):
         return self.name
 
-    # def get_absolute_url(self):
-    #     return reverse('org-detail', kwargs={'pk': self.pk})
 
-
-class AssetType(models.Model):
-    type = models.CharField(max_length=255, null=False)
-
-    def __str__(self):
-        return self.type
-
-
-# noinspection PyTypeChecker
 class Asset(models.Model):
+    TYPE_DOMAIN = 'domain'
+    TYPE_IPV4 = 'ipv4'
+    TYPE_RANGE4 = 'range4'
+    TYPE_NETMASK4 = 'netmask4'
+    TYPE_CIDR4 = 'cidr4'
+    TYPE_IPV6 = 'ipv6'
+    TYPE_RANGE6 = 'range6'
+    TYPE_CIDR6 = 'cidr6'
+    TYPE = [
+        (TYPE_DOMAIN, ('domain')),
+        (TYPE_IPV4, ('ipv4')),
+        (TYPE_RANGE4, ('range4')),
+        (TYPE_NETMASK4, ('netmask4')),
+        (TYPE_CIDR4, ('cidr4')),
+        (TYPE_IPV6, ('ipv6')),
+        (TYPE_RANGE6, ('range6')),
+        (TYPE_CIDR6, ('cidr6')),
+    ]
+
     name = models.CharField(max_length=255, null=False, unique=True)
     org = models.ForeignKey(Org, on_delete=models.PROTECT)
-    type = models.ForeignKey(AssetType, on_delete=models.PROTECT)
+    type = models.CharField(max_length=255, choices=TYPE)
     comment = models.TextField(null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
-    #author = models.ForeignKey(User, on_delete=models.PROTECT)
 
     def __str__(self):
         return self.name
@@ -134,8 +164,3 @@ class Asset(models.Model):
             test = validators.domain(self.name)
             if test != True:
                 raise ValidationError('\"' + self.name + '\" is not a valid domain name')
-
-
-    # def get_absolute_url(self):
-    #     return reverse('asset-detail', kwargs={'pk': self.pk})
-

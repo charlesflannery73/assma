@@ -25,7 +25,7 @@ class AssetFilter(BaseFilter):
     search_fields = {
         'search_text': ['name'],
         'search_org': ['org__name'],
-        'search_type': ['assettype__type'],
+        'search_type': ['type'],
         'search_comment': ['comment'],
     }
 
@@ -33,8 +33,8 @@ class AssetFilter(BaseFilter):
 class OrgFilter(BaseFilter):
     search_fields = {
         'search_text': ['name'],
-        'search_sector': ['sector__sector'],
-        'search_level': ['level__level'],
+        'search_sector': ['sector'],
+        'search_level': ['level'],
         'search_tier': ['tier'],
         'search_id': ['id'],
         'search_comment': ['comment'],
@@ -86,7 +86,7 @@ class OrgSearch(SearchListView):
         return render(request, self.template_name, {'form': form})
 
 
-class OrgListView(ListView):       # <app>/<model>_<viewtype>.html
+class OrgListView(ListView):
     model = Org
     template_name = 'web/org_list.html'
     context_object_name = 'orgs'
@@ -103,8 +103,8 @@ class OrgListView(ListView):       # <app>/<model>_<viewtype>.html
         comment_val = self.request.GET.get('comment')
         new_context = Org.objects.filter(
             Q(name__icontains=name_val) &
-            Q(sector__sector__icontains=sector_val) &
-            Q(level__level__icontains=level_val) &
+            Q(sector__icontains=sector_val) &
+            Q(level__icontains=level_val) &
             Q(tier__icontains=tier_val) &
             Q(id__icontains=id_val) &
             Q(comment__icontains=comment_val)
@@ -141,7 +141,7 @@ class OrgDeleteView(LoginRequiredMixin, DeleteView, View):
     success_url = '/'
 
 
-class AssetListView(ListView):       # <app>/<model>_<viewtype>.html
+class AssetListView(ListView):
     model = Asset
     template_name = 'web/asset_list.html'
     context_object_name = 'assets'
@@ -158,7 +158,7 @@ class AssetListView(ListView):       # <app>/<model>_<viewtype>.html
         new_context = Asset.objects.filter(
             Q(name__icontains=name_val) &
             Q(org__name__icontains=org_val) &
-            Q(type__type__icontains=type_val) &
+            Q(type__icontains=type_val) &
             Q(comment__icontains=comment_val)
         ).order_by('name')
         return new_context
