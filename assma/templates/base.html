@@ -32,7 +32,7 @@
             <div class="navbar-nav mr-auto">
               <a class="nav-item nav-link" href="{% url 'assma-home' %}">Home</a>
               <a class="nav-item nav-link" href="{% url 'assma-about' %}">About</a>
-              <a class="nav-item nav-link" href="{% url 'api_org_list' %}">API</a>
+              <a class="nav-item nav-link" href="{% url 'api-root' %}">API</a>
               {% if user.is_authenticated %}
               <a class="nav-item nav-link" href="/admin/">Admin</a>
               {% endif %}

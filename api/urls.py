@@ -1,8 +1,18 @@
-from django.urls import path
-from . import views
+from api import views
+from django.urls import include, path
+from rest_framework.routers import DefaultRouter
+from rest_framework.schemas import get_schema_view
+
+from .views import OrgViewSet, AssetViewSet
+
+
+router = DefaultRouter()
+router.register('org', OrgViewSet, 'api_org_list')
+router.register('asset', AssetViewSet, 'api_asset_list')
+schema_view = get_schema_view(title='Assma API',
+                              description='An API to query orgs or assets')
+
 
 urlpatterns = [
-    path('org/', views.org_list, name='api_org_list'),
-    path('org/<int:pk>/', views.org_detail, name='api_org_detail'),
-
+    path('api/', include(router.urls)),
 ]
