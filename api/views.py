@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from django.db.models import Q
 
 from web.models import Org, Asset
-from .serializers import OrgSerializer, AssetSerializer, AssetDetailSerializer
+from .serializers import OrgSerializer, AssetSerializer, AssetDetailSerializer, AssetCreateSerializer
 
 
 class OrgViewSet(viewsets.ModelViewSet):
@@ -29,6 +29,13 @@ class OrgViewSet(viewsets.ModelViewSet):
     """
     queryset = Org.objects.all()
     serializer_class = OrgSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = OrgSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+
 
     def get_queryset(self):
 
@@ -84,6 +91,15 @@ class AssetViewSet(viewsets.ModelViewSet):
     serializer_class = AssetSerializer
     detail_serializer_class = AssetDetailSerializer
 
+
+    def create(self, request, *args, **kwargs):
+        serializer = AssetCreateSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        #org_id = self.validated_data.get("org")
+        #print("org_id:"+str(org_id))
+        serializer.save()
+        return Response(serializer.data)
+
     def get_serializer_class(self):
         if self.action == 'retrieve':
             if hasattr(self, 'detail_serializer_class'):
@@ -128,7 +144,33 @@ class AssetViewSet(viewsets.ModelViewSet):
 
         return queryset
 
-
+    # def create(self, request):
+    #     message = request.data.pop('message_type')
+    #     # check if incoming api request is for new event creation
+    #     if message == "NewEvent":
+    #         event = request.data.pop('event')
+    #         sport = event.pop('sport')
+    #         markets = event.pop('markets')[0] # for now we have only one market
+    #         selections = markets.pop('selections')
+    #         sport = Sport.objects.create(**sport)
+    #         markets = Market.objects.create(**markets, sport=sport)
+    #         for selection in selections:
+    #             markets.selections.create(**selection)
+    #         match = Match.objects.create(**event, sport=sport, market=markets)
+    #         return Response(status=status.HTTP_201_CREATED)
+    #     # check if incoming api request is for updation of odds
+    #     elif message == "UpdateOdds":
+    #         event = request.data.pop('event')
+    #         markets = event.pop('markets')[0]
+    #         selections = markets.pop('selections')
+    #         for selection in selections:
+    #             s = Selection.objects.get(id=selection['id'])
+    #             s.odds = selection['odds']
+    #             s.save()
+    #         match = Match.objects.get(id=event['id'])
+    #         return Response(status=status.HTTP_201_CREATED)
+    #     else:
+    #         return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 
