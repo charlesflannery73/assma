@@ -23,3 +23,11 @@ class AssetSerializer(serializers.ModelSerializer):
     #     org = super(AssetSerializer, self).to_representation(instance)
     #     org['org_id'] = instance.org.id
     #     return org
+
+class AssetDetailSerializer(serializers.ModelSerializer):
+    org = OrgSerializer()
+
+    class Meta:
+        model = Asset
+        fields = '__all__'
+        #fields = ['id', 'name', 'org', 'org_id', 'type', 'comment', 'created', 'modified']

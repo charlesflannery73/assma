@@ -1,4 +1,8 @@
 asgiref==3.2.3
+certifi==2019.11.28
+chardet==3.0.4
+coreapi==2.3.3
+coreschema==0.0.4
 decorator==4.4.2
 Django==3.0.2
 django-crispy-forms==1.8.1
@@ -6,10 +10,18 @@ django-filter==2.2.0
 django-filters==0.2.1
 django-search-views==0.3.7
 djangorestframework==3.11.0
+idna==2.9
+itypes==1.1.0
+Jinja2==2.11.1
+MarkupSafe==1.1.1
 Pillow==7.0.0
 pkg-resources==0.0.0
 pytz==2019.3
+PyYAML==5.3
+requests==2.23.0
 six==1.14.0
 sqlparse==0.3.0
+uritemplate==3.0.1
+urllib3==1.25.8
 validators==0.14.2
 whois==0.9.6
