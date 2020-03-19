@@ -37,4 +37,4 @@ class AssetCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Asset
         #fields = '__all__'
-        fields = ['id', 'name', 'org', 'type', 'comment', 'created', 'modified']
+        fields = ['id', 'name', 'org__name', 'org_id', 'type', 'comment', 'created', 'modified']

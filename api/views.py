@@ -95,8 +95,6 @@ class AssetViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         serializer = AssetCreateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        #org_id = self.validated_data.get("org")
-        #print("org_id:"+str(org_id))
         serializer.save()
         return Response(serializer.data)
 
