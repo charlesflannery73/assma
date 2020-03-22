@@ -1,10 +1,9 @@
-from rest_framework import status, viewsets
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from django.db.models import Q
+from rest_framework import viewsets
+from rest_framework.authentication import TokenAuthentication, SessionAuthentication
+from rest_framework.permissions import IsAuthenticated
 
 from web.models import Org, Asset
-from .serializers import OrgSerializer, AssetSerializer, AssetDetailSerializer, AssetCreateSerializer
+from .serializers import OrgSerializer, AssetSerializer, AssetDetailSerializer
 
 
 class OrgViewSet(viewsets.ModelViewSet):
@@ -27,15 +26,11 @@ class OrgViewSet(viewsets.ModelViewSet):
     delete:
     add delete help here
     """
+    authentication_classes = [TokenAuthentication, SessionAuthentication]
+    permission_classes = [IsAuthenticated]
+
     queryset = Org.objects.all()
     serializer_class = OrgSerializer
-
-    def create(self, request, *args, **kwargs):
-        serializer = OrgSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data)
-
 
     def get_queryset(self):
 
@@ -87,16 +82,13 @@ class AssetViewSet(viewsets.ModelViewSet):
     delete:
     add delete help here
     """
+
+    authentication_classes = [TokenAuthentication, SessionAuthentication]
+    permission_classes = [IsAuthenticated]
+
     queryset = Asset.objects.all()
     serializer_class = AssetSerializer
     detail_serializer_class = AssetDetailSerializer
-
-
-    def create(self, request, *args, **kwargs):
-        serializer = AssetCreateSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data)
 
     def get_serializer_class(self):
         if self.action == 'retrieve':
@@ -141,116 +133,3 @@ class AssetViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(comment__contains=comment)
 
         return queryset
-
-    # def create(self, request):
-    #     message = request.data.pop('message_type')
-    #     # check if incoming api request is for new event creation
-    #     if message == "NewEvent":
-    #         event = request.data.pop('event')
-    #         sport = event.pop('sport')
-    #         markets = event.pop('markets')[0] # for now we have only one market
-    #         selections = markets.pop('selections')
-    #         sport = Sport.objects.create(**sport)
-    #         markets = Market.objects.create(**markets, sport=sport)
-    #         for selection in selections:
-    #             markets.selections.create(**selection)
-    #         match = Match.objects.create(**event, sport=sport, market=markets)
-    #         return Response(status=status.HTTP_201_CREATED)
-    #     # check if incoming api request is for updation of odds
-    #     elif message == "UpdateOdds":
-    #         event = request.data.pop('event')
-    #         markets = event.pop('markets')[0]
-    #         selections = markets.pop('selections')
-    #         for selection in selections:
-    #             s = Selection.objects.get(id=selection['id'])
-    #             s.odds = selection['odds']
-    #             s.save()
-    #         match = Match.objects.get(id=event['id'])
-    #         return Response(status=status.HTTP_201_CREATED)
-    #     else:
-    #         return Response(status=status.HTTP_400_BAD_REQUEST)
-
-
-
-
-
-
-
-
-# @api_view(['GET', 'POST'])
-# def org_list(request):
-#
-#     if request.method == "GET":
-#         orgs = Org.objects.all()
-#         serializer = OrgSerializer(orgs, many=True)
-#         return Response(serializer.data)
-#     elif request.method == "POST":
-#         serializer = OrgSerializer(data=request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data, status=status.HTTP_201_CREATED)
-#         else:
-#             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-#
-# @api_view(['GET', 'POST'])
-# def asset_list(request):
-#
-#     if request.method == "GET":
-#         assets = Asset.objects.all()
-#         serializer = AssetSerializer(assets, many=True)
-#         return Response(serializer.data)
-#     elif request.method == "POST":
-#         serializer = AssetSerializer(data=request.data)
-#         org_val = serializer.data.__getattribute__()
-#             request.POST.get('org')
-#         print(org_val)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data, status=status.HTTP_201_CREATED)
-#         else:
-#             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-#
-#
-# @api_view(['GET', 'PUT', 'DELETE'])
-# def org_detail(request, pk):
-#
-#     try:
-#         org = Org.objects.get(pk=pk)
-#     except Org.DoesNotExist:
-#         return Response(status=status.HTTP_404_NOT_FOUND)
-#
-#     if request.method == "GET":
-#         serializer = OrgSerializer(org)
-#         return Response(serializer.data)
-#     elif request.method == "POST":
-#         serializer = OrgSerializer(org, data=request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data)
-#         else:
-#             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-#     elif request.method == "DELETE":
-#         org.delete()
-#         return Response(status=status.HTTP_204_NO_CONTENT)
-#
-# @api_view(['GET', 'PUT', 'DELETE'])
-# def asset_detail(request, pk):
-#
-#     try:
-#         asset = Asset.objects.get(pk=pk)
-#     except Asset.DoesNotExist:
-#         return Response(status=status.HTTP_404_NOT_FOUND)
-#
-#     if request.method == "GET":
-#         serializer = AssetSerializer(asset)
-#         return Response(serializer.data)
-#     elif request.method == "POST":
-#         serializer = AssetSerializer(asset, data=request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data)
-#         else:
-#             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-#     elif request.method == "DELETE":
-#         asset.delete()
-#        return Response(status=status.HTTP_204_NO_CONTENT)

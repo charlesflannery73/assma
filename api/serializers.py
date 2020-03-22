@@ -8,21 +8,13 @@ class OrgSerializer(serializers.ModelSerializer):
         model = Org
         fields = '__all__'
 
+
 class AssetSerializer(serializers.ModelSerializer):
-    #org = serializers.SlugRelatedField(read_only=True, slug_field='name')
-    #org = serializers.StringRelatedField()
-    #org = serializers.CharField(read_only=True,source='org.name')
-    #org = OrgSerializer()
 
     class Meta:
         model = Asset
         fields = '__all__'
-        #fields = ['id', 'name', 'org', 'org_id', 'type', 'comment', 'created', 'modified']
 
-    # def to_representation(self, instance):
-    #     org = super(AssetSerializer, self).to_representation(instance)
-    #     org['org_id'] = instance.org.id
-    #     return org
 
 class AssetDetailSerializer(serializers.ModelSerializer):
     org = OrgSerializer()
@@ -30,11 +22,3 @@ class AssetDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Asset
         fields = '__all__'
-        #fields = ['id', 'name', 'org', 'org_id', 'type', 'comment', 'created', 'modified']
-
-class AssetCreateSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Asset
-        #fields = '__all__'
-        fields = ['id', 'name', 'org__name', 'org_id', 'type', 'comment', 'created', 'modified']
