@@ -7,6 +7,9 @@
         <div class="media-body">
           <h2 class="account-heading">{{ user.username }}</h2>
           <p class="text-secondary">{{ user.email }}</p>
+          {% if token %}
+          <p class="text-secondary">api-token {{ token }}</p>
+          {% endif %}
         </div>
       </div>
       <form method="POST" enctype="multipart/form-data">
