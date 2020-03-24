@@ -121,19 +121,11 @@ class OrgCreateView(LoginRequiredMixin, CreateView):
     fields = ['name', 'sector', 'level', 'tier', 'comment']
     success_url = '/'
 
-    def form_valid(self, form):
-        form.instance.author = self.request.user
-        return super().form_valid(form)
-
 
 class OrgUpdateView(LoginRequiredMixin, UpdateView):
     model = Org
     fields = ['name', 'sector', 'level', 'tier', 'comment']
     success_url = '/'
-
-    def form_valid(self, form):
-        form.instance.author = self.request.user
-        return super().form_valid(form)
 
 
 class OrgDeleteView(LoginRequiredMixin, DeleteView, View):
