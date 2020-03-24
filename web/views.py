@@ -148,7 +148,7 @@ class AssetListView(ListView):
         type_val = self.request.GET.get('type')
         comment_val = self.request.GET.get('comment')
         new_context = Asset.objects.filter(
-            Q(name__icontains=name_val) &
+            ((Q(end_ip__gte=name_val) & Q(start_ip__lte=name_val)) | Q(name__icontains=name_val)) &
             Q(org__name__icontains=org_val) &
             Q(type__icontains=type_val) &
             Q(comment__icontains=comment_val)
