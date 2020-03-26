@@ -9,6 +9,7 @@ from search_views.filters import BaseFilter
 from django.db.models import Q
 from django.urls import reverse
 import ipaddress
+import uuid
 
 class HomeView(View):
     def get(self, request, *args, **kwargs):
@@ -149,7 +150,7 @@ class AssetListView(ListView):
         comment_val = self.request.GET.get('comment')
 
         try:
-            ip = ipaddress.IPv4Address(name_val)
+            ip = int(ipaddress.ip_address(name_val))
             new_context = Asset.objects.filter(
                 Q(start_ip__lte=ip) &
                 Q(end_ip__gte=ip) &
@@ -158,7 +159,7 @@ class AssetListView(ListView):
                 Q(comment__icontains=comment_val)
             ).order_by('name')
             return new_context
-        except ValueError:
+        except:
             new_context = Asset.objects.filter(
                 Q(name__icontains=name_val) &
                 Q(org__name__icontains=org_val) &
