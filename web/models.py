@@ -4,7 +4,7 @@ from django.db import models
 import ipaddress
 import re
 import validators
-
+import socket
 
 class Org(models.Model):
 
@@ -180,3 +180,15 @@ class Asset(models.Model):
             test = validators.domain(self.name)
             if test != True:
                 raise ValidationError('\"' + self.name + '\" is not a valid domain name')
+
+            # move this code to an async task so the browser doesn't hang
+            try:
+                comment = self.comment
+
+                lookup = socket.gethostbyname_ex(self.name)
+                self.comment = \
+                    "__hostname: " + lookup[0] + "\r" + \
+                    "__aliases: " + str(lookup[1]) + "\r" + \
+                    "__ips: " + str(lookup[2])
+            except:
+                self.comment = "__iplookup failed for " + self.name
