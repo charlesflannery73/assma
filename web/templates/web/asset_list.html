@@ -6,8 +6,6 @@
     <table class="table table-bordered table-condensed">
         <tr>
             <th>Name</th>
-            <th>Start IP</th>
-            <th>End IP</th>
             <th>Org</th>
             <th>Type</th>
             <th>Comment</th>
@@ -20,8 +18,6 @@
         {% for object in object_list %}
         <tr>
             <td>{{object.name}}</td>
-            <td>{{object.start_ip}}</td>
-            <td>{{object.end_ip}}</td>
             <td>{{object.org}}</td>
             <td>{{object.type}}</td>
             <td>{{object.comment}}</td>

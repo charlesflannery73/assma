@@ -81,8 +81,8 @@ class Asset(models.Model):
     name = models.CharField(max_length=255, null=False, unique=True)
     org = models.ForeignKey(Org, on_delete=models.PROTECT)
     type = models.CharField(max_length=255, choices=TYPE)
-    start_ip = models.GenericIPAddressField(null=True, blank=True)
-    end_ip = models.GenericIPAddressField(null=True, blank=True)
+    start_ip = models.IntegerField(null=True, blank=True)
+    end_ip = models.IntegerField(null=True, blank=True)
     comment = models.TextField(null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
@@ -102,32 +102,32 @@ class Asset(models.Model):
                 ipaddress.IPv4Address(str(self.name))
             except ValueError:
                 raise ValidationError('\"' + self.name + '\" is not a valid ipv4 address')
-            self.start_ip = self.name
-            self.end_ip = self.name
+            self.start_ip = int(ipaddress.IPv4Address(self.name))
+            self.end_ip = int(ipaddress.IPv4Address(self.name))
 
         if str(self.type) == "ipv6":
             try:
                 ipaddress.IPv6Address(str(self.name))
             except ValueError:
                 raise ValidationError('\"' + self.name + '\" is not a valid ipv6 address')
-            self.start_ip = self.name
-            self.end_ip = self.name
+            self.start_ip = int(ipaddress.IPv4Address(self.name))
+            self.end_ip = int(ipaddress.IPv4Address(self.name))
 
         if str(self.type) == "cidr4":
             try:
                 ipaddress.IPv4Network(str(self.name))
             except ValueError:
                 raise ValidationError('\"' + self.name + '\" is not a valid ipv4 cidr address')
-            self.start_ip = str(ipaddress.IPv4Network(self.name)[0])
-            self.end_ip = str(ipaddress.IPv4Network(self.name)[-1])
+            self.start_ip = int(ipaddress.IPv4Network(self.name)[0])
+            self.end_ip = int(ipaddress.IPv4Network(self.name)[-1])
 
         if str(self.type) == "cidr6":
             try:
                 ipaddress.IPv6Network(str(self.name))
             except ValueError:
                 raise ValidationError('\"' + self.name + '\" is not a valid ipv6 cidr address')
-            self.start_ip = str(ipaddress.IPv6Network(self.name)[0])
-            self.end_ip = str(ipaddress.IPv6Network(self.name)[-1])
+            self.start_ip = int(ipaddress.IPv6Network(self.name)[0])
+            self.end_ip = int(ipaddress.IPv6Network(self.name)[-1])
 
         if str(self.type) == "range4":
             match = re.search('[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}-[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}', self.name,  )
@@ -142,8 +142,8 @@ class Asset(models.Model):
                         ipaddress.IPv4Address(str(ip4))
                     except ValueError:
                         raise ValidationError('\"' + ip4 + '\" is not a valid ipv4 address')
-                self.start_ip = pair[0]
-                self.end_ip = pair[1]
+                self.start_ip = int(ipaddress.IPv4Address(pair[0]))
+                self.end_ip = int(ipaddress.IPv4Address(pair[1]))
             else:
                 raise ValidationError('\"' + self.name + '\" is not a valid range4 address, please use a hyphen as a separator eg 1.2.3.4-1.2.3.8')
 
@@ -159,8 +159,8 @@ class Asset(models.Model):
                         ipaddress.IPv6Address(str(ip6))
                     except ValueError:
                         raise ValidationError('\"' + ip6 + '\" is not a valid ipv6 address')
-                self.start_ip = pair[0]
-                self.end_ip = pair[1]
+                self.start_ip = int(ipaddress.IPv4Address(pair[0]))
+                self.end_ip = int(ipaddress.IPv4Address(pair[1]))
             else:
                 raise ValidationError('\"' + self.name + '\" is not a valid range6 address, please use a hyphen as a separator eg 2001:db8::-2001:db8:0000:0000:0000:0000:0000:00ff')
 
@@ -171,8 +171,8 @@ class Asset(models.Model):
                     ipaddress.IPv4Network(str(self.name))
                 except ValueError:
                     raise ValidationError('\"' + self.name + '\" is not a valid ipv4 netmask, please use forward slash as separator eg 192.168.10.0/255.255.255.0')
-                self.start_ip = str(ipaddress.IPv4Network(self.name)[0])
-                self.end_ip = str(ipaddress.IPv4Network(self.name)[-1])
+                self.start_ip = int(ipaddress.IPv4Network(self.name)[0])
+                self.end_ip = int(ipaddress.IPv4Network(self.name)[-1])
             else:
                 raise ValidationError('\"' + self.name + '\" is not a valid ipv4 netmask, please use forward slash as separator eg 192.168.10.0/255.255.255.0')
 

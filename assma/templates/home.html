@@ -39,8 +39,6 @@
     <table class="table table-bordered table-condensed">
         <tr>
             <th>Name</th>
-            <th>Start IP</th>
-            <th>End IP</th>
             <th>Org</th>
             <th>Type</th>
             <th>Comment</th>
@@ -53,8 +51,6 @@
         {% for asset in assets %}
         <tr>
             <td>{{asset.name}}</td>
-            <td>{{asset.start_ip}}</td>
-            <td>{{asset.end_ip}}</td>
             <td>{{asset.org}}</td>
             <td>{{asset.type}}</td>
             <td>{{asset.comment}}</td>
