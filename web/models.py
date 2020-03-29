@@ -183,12 +183,15 @@ class Asset(models.Model):
 
             # move this code to an async task so the browser doesn't hang
             try:
-                comment = self.comment
+                comment = re.sub('^__.*$', '', self.comment, 0, re.MULTILINE)
+                comment = re.sub(r'^\s*$', '', comment, 0, re.MULTILINE)
 
                 lookup = socket.gethostbyname_ex(self.name)
+
                 self.comment = \
                     "__hostname: " + lookup[0] + "\r" + \
                     "__aliases: " + str(lookup[1]) + "\r" + \
-                    "__ips: " + str(lookup[2])
+                    "__ips: " + str(lookup[2]) + "\r" + \
+                    comment
             except:
-                self.comment = "__iplookup failed for " + self.name
+                self.comment = "__iplookup failed for " + self.name + "\r" + comment

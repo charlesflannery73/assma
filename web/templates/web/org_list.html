@@ -24,7 +24,7 @@
             <td>{{object.level}}</td>
             <td>{{object.tier}}</td>
             <td>{{object.id}}</td>
-            <td>{{object.comment}}</td>
+            <td>{{object.comment|linebreaks}}</td>
             <td>{{object.created|date:"Y-m-d H:i:s"}}</td>
             <td>{{object.modified|date:"Y-m-d H:i:s"}}</td>
             {% if user.is_authenticated %}

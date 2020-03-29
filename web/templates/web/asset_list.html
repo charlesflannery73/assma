@@ -20,7 +20,7 @@
             <td>{{object.name}}</td>
             <td>{{object.org}}</td>
             <td>{{object.type}}</td>
-            <td>{{object.comment}}</td>
+            <td>{{object.comment|linebreaks}}</td>
             <td>{{object.created|date:"Y-m-d H:i:s"}}</td>
             <td>{{object.modified|date:"Y-m-d H:i:s"}}</td>
             {% if user.is_authenticated %}

@@ -22,7 +22,7 @@
             <td>{{org.level}}</td>
             <td>{{org.tier}}</td>
             <td>{{org.id}}</td>
-            <td>{{org.comment}}</td>
+            <td>{{org.comment|linebreaks}}</td>
             <td>{{org.created|date:"Y-m-d H:i:s"}}</td>
             <td>{{org.modified|date:"Y-m-d H:i:s"}}</td>
             {% if user.is_authenticated %}
@@ -53,7 +53,7 @@
             <td>{{asset.name}}</td>
             <td>{{asset.org}}</td>
             <td>{{asset.type}}</td>
-            <td>{{asset.comment}}</td>
+            <td>{{asset.comment|linebreaks}}</td>
             <td>{{asset.created|date:"Y-m-d H:i:s"}}</td>
             <td>{{asset.modified|date:"Y-m-d H:i:s"}}</td>
             {% if user.is_authenticated %}
