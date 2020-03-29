@@ -181,17 +181,22 @@ class Asset(models.Model):
             if test != True:
                 raise ValidationError('\"' + self.name + '\" is not a valid domain name')
 
+            # remove old lookup results ready for new one
+            comment = re.sub('^__.*$', '', self.comment, 0, re.MULTILINE)
+            # remove blank lines
+            comment = re.sub(r'^\s*$', '', comment, 0, re.MULTILINE)
+
             # move this code to an async task so the browser doesn't hang
             try:
-                comment = re.sub('^__.*$', '', self.comment, 0, re.MULTILINE)
-                comment = re.sub(r'^\s*$', '', comment, 0, re.MULTILINE)
-
                 lookup = socket.gethostbyname_ex(self.name)
+                hostname = lookup[0]
+                aliases = re.sub('[\[\]\']', '', str(lookup[1]))
+                ips = re.sub('[\[\]\']', '', str(lookup[2]))
 
                 self.comment = \
-                    "__hostname: " + lookup[0] + "\r" + \
-                    "__aliases: " + str(lookup[1]) + "\r" + \
-                    "__ips: " + str(lookup[2]) + "\r" + \
-                    comment
+                    comment + \
+                    "__hostname: " + hostname + "\r\n" + \
+                    "__aliases: " + aliases + "\r\n" + \
+                    "__ips: " + ips
             except:
-                self.comment = "__iplookup failed for " + self.name + "\r" + comment
+                self.comment = comment + "\r\n" +"__iplookup failed for " + self.name

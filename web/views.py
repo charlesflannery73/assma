@@ -9,7 +9,7 @@ from search_views.filters import BaseFilter
 from django.db.models import Q
 from django.urls import reverse
 import ipaddress
-import uuid
+
 
 class HomeView(View):
     def get(self, request, *args, **kwargs):
