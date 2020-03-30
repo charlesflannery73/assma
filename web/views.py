@@ -152,19 +152,24 @@ class AssetListView(ListView):
         try:
             ip = int(ipaddress.ip_address(name_val))
             new_context = Asset.objects.filter(
-                Q(start_ip__lte=ip) &
-                Q(end_ip__gte=ip) &
-                Q(org__name__icontains=org_val) &
-                Q(type__icontains=type_val) &
-                Q(comment__icontains=comment_val)
+                (
+                    Q(start_ip__lte=ip) &
+                    Q(end_ip__gte=ip) &
+                    Q(org__name__icontains=org_val) &
+                    Q(type__icontains=type_val) &
+                    Q(comment__icontains=comment_val)) |
+                Q(comment__icontains=name_val)
             ).order_by('name')
             return new_context
         except:
             new_context = Asset.objects.filter(
-                Q(name__icontains=name_val) &
-                Q(org__name__icontains=org_val) &
-                Q(type__icontains=type_val) &
-                Q(comment__icontains=comment_val)
+                (
+                    Q(name__icontains=name_val) &
+                    Q(org__name__icontains=org_val) &
+                    Q(type__icontains=type_val) &
+                    Q(comment__icontains=comment_val)) |
+                Q(comment__icontains=name_val)
+
             ).order_by('name')
             return new_context
 
