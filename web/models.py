@@ -194,9 +194,9 @@ class Asset(models.Model):
                 ips = re.sub('[\[\]\']', '', str(lookup[2]))
 
                 self.comment = \
-                    comment + \
+                    comment + "\r\n" + \
                     "__hostname: " + hostname + "\r\n" + \
                     "__aliases: " + aliases + "\r\n" + \
                     "__ips: " + ips
             except:
-                self.comment = comment + "\r\n" +"__iplookup failed for " + self.name
+                self.comment = comment + "\r\n" + "__iplookup failed for " + self.name
