@@ -22,6 +22,13 @@ ALTER DATABASE assma CHARACTER SET 'utf8';
 exit;
 ```
 
+Create assmauser
+---
+```
+sudo adduser --disabled-password assmauser
+sudo su assmauser
+```
+
 Get assma
 ---------
 ```
