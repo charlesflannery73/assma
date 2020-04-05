@@ -11,21 +11,19 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+import environ
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+root = environ.Path(__file__) - 3
+env = environ.Env()
+environ.Env.read_env()
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '^&)k*vyqllw^q4kd^^#1b81s512!&iyshq!a88s0poxwpqukv1'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
+# default is development = add a .env file for production
+SECRET_KEY = env.str('SECRET_KEY', 'my-super-secret-dev-only-key')
+DEBUG = env.bool('DEBUG', True)
+ALLOWED_HOSTS = env.str('ALLOWED_HOSTS', ['127.0.0.1', 'localhost', '[::1]'])
 
 
 # Application definition
@@ -82,8 +80,12 @@ WSGI_APPLICATION = 'assma.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': env.str('DB_ENGINE', 'django.db.backends.sqlite3'),
+        'NAME': env.str('DB_NAME', os.path.join(BASE_DIR, 'db.sqlite3')),
+        'USER': env.str('DB_USER', ''),
+        'PASSWORD': env.str('DB_PASSWORD', ''),
+        'HOST': env.str('DB_HOST', None),
+        'PORT': env.int('DB_PORT', None),
     }
 }
 
