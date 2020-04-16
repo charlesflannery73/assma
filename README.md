@@ -8,7 +8,7 @@ sudo apt-get install python3-venv nginx mysql-server python3-pip libmysqlclient-
 sudo mysql_secure_installation
 ```
 + set root password
-+ remove anonymouse users
++ remove anonymous users
 + disallow root login remotely
 + remove test database
 + reload privileges
@@ -26,7 +26,7 @@ Create assmauser
 ---
 ```
 sudo adduser --disabled-password assmauser
-sudo su assmauser
+sudo su - assmauser
 ```
 
 Get assma
@@ -40,4 +40,22 @@ pip install -r requirements.txt
 python manage.py makemigrations
 python manage.py migrate
 python manage.py createsuperuser
+```
+
+create  production .env file if deploying to production
+---
+```
+# create .env file in same dir as assma/assma/settings.py
+
+SECRET_KEY=my-super-secret-key-erlksduhiuyhwnci4nu9576w7vtysueh-change-me
+DEBUG=False
+ALLOWED_HOSTS='0.0.0.0'
+
+DB_ENGINE=django.db.backends.mysql
+DB_NAME=assma
+DB_USER=assmauser
+DB_PASSWORD=change-me
+DB_HOST=127.0.0.1
+DB_PORT=3306
+
 ```
