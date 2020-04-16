@@ -1,7 +1,7 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import View, ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import View, ListView, CreateView, UpdateView, DeleteView
 from .models import Org, Asset
 from .forms import OrgSearchForm, AssetSearchForm
 from search_views.search import SearchListView
@@ -11,7 +11,7 @@ from django.urls import reverse
 import ipaddress
 
 
-class HomeView(View):
+class HomeView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         orgs = Org.objects.filter().order_by('-modified')[:5]
         assets = Asset.objects.filter().order_by('-modified')[:5]
@@ -41,7 +41,7 @@ class OrgFilter(BaseFilter):
         'search_comment': ['comment'],
     }
 
-class AssetSearch(SearchListView):
+class AssetSearch(LoginRequiredMixin, SearchListView):
     model = Asset
     template_name = "web/search.html"
     form_class = AssetSearchForm
@@ -61,7 +61,7 @@ class AssetSearch(SearchListView):
         return render(request, self.template_name, {'form': form})
 
 
-class OrgSearch(SearchListView):
+class OrgSearch(LoginRequiredMixin, SearchListView):
     model = Org
     template_name = "web/search.html"
     form_class = OrgSearchForm
@@ -87,7 +87,7 @@ class OrgSearch(SearchListView):
         return render(request, self.template_name, {'form': form})
 
 
-class OrgListView(ListView):
+class OrgListView(LoginRequiredMixin, ListView):
     model = Org
     template_name = 'web/org_list.html'
     context_object_name = 'orgs'
@@ -113,10 +113,6 @@ class OrgListView(ListView):
         return new_context
 
 
-class OrgDetailView(DetailView):
-    model = Org
-
-
 class OrgCreateView(LoginRequiredMixin, CreateView):
     model = Org
     fields = ['name', 'sector', 'level', 'tier', 'comment']
@@ -134,7 +130,7 @@ class OrgDeleteView(LoginRequiredMixin, DeleteView, View):
     success_url = '/'
 
 
-class AssetListView(ListView):
+class AssetListView(LoginRequiredMixin, ListView):
     model = Asset
     template_name = 'web/asset_list.html'
     context_object_name = 'assets'
@@ -181,10 +177,6 @@ class AssetCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
-
-
-class AssetDetailView(DetailView):
-    model = Asset
 
 
 class AssetUpdateView(LoginRequiredMixin, UpdateView):

@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
+{% if user.is_authenticated %}
     <h2>Recent Org updates</h2>
     <table class="table table-bordered table-condensed">
         <tr>
@@ -65,4 +66,7 @@
         {% endfor %}
 
     </table>
+{% else %}
+Please login to use assma
+{% endif %}
 {% endblock content %}
