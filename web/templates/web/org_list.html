@@ -13,7 +13,7 @@
             <th>Comment</th>
             <th>Created</th>
             <th>Modified</th>
-            {% if user.is_authenticated %}
+            {% if perms.web.delete_org %}
             <th>Modify</th>
             {% endif %}
         </tr>
@@ -27,7 +27,7 @@
             <td>{{object.comment|linebreaks}}</td>
             <td>{{object.created|date:"Y-m-d H:i:s"}}</td>
             <td>{{object.modified|date:"Y-m-d H:i:s"}}</td>
-            {% if user.is_authenticated %}
+            {% if perms.web.delete_org %}
             <td><a href="{% url 'org-update' object.id %}">update</a>
                 <br>
                 <a href="{% url 'org-delete' object.id %}">delete</a>

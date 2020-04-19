@@ -1,6 +1,6 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.views.generic import View, ListView, CreateView, UpdateView, DeleteView
 from .models import Org, Asset
 from .forms import OrgSearchForm, AssetSearchForm
@@ -113,21 +113,24 @@ class OrgListView(LoginRequiredMixin, ListView):
         return new_context
 
 
-class OrgCreateView(LoginRequiredMixin, CreateView):
+class OrgCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = Org
     fields = ['name', 'sector', 'level', 'tier', 'comment']
     success_url = '/'
+    permission_required = ('web.add_org')
 
 
-class OrgUpdateView(LoginRequiredMixin, UpdateView):
+class OrgUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = Org
     fields = ['name', 'sector', 'level', 'tier', 'comment']
     success_url = '/'
+    permission_required = ('web.change_org')
 
 
-class OrgDeleteView(LoginRequiredMixin, DeleteView, View):
+class OrgDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView, View):
     model = Org
     success_url = '/'
+    permission_required = ('web.delete_org')
 
 
 class AssetListView(LoginRequiredMixin, ListView):
@@ -169,27 +172,30 @@ class AssetListView(LoginRequiredMixin, ListView):
             ).order_by('name')
             return new_context
 
-class AssetCreateView(LoginRequiredMixin, CreateView):
+class AssetCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = Asset
     fields = ['name', 'org', 'type', 'comment']
     success_url = '/'
+    permission_required = ('web.add_asset')
 
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
 
 
-class AssetUpdateView(LoginRequiredMixin, UpdateView):
+class AssetUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = Asset
     fields = ['name', 'org', 'type', 'comment']
     success_url = '/'
+    permission_required = ('web.change_asset')
 
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
 
 
-class AssetDeleteView(LoginRequiredMixin, DeleteView):
+class AssetDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     model = Asset
     success_url = '/'
+    permission_required = ('web.delete_asset')
 

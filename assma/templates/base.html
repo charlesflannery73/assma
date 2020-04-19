@@ -40,7 +40,7 @@
             <!-- Navbar Right Side -->
             <div class="navbar-nav">
               {% if user.is_authenticated %}
-                <a class="nav-item nav-link" href="{% url 'profile' %}">Profile</a>
+                <a class="nav-item nav-link" href="{% url 'profile' %}">{{ user.username }}'s Profile</a>
                 <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
               {% else %}
                 <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
@@ -60,11 +60,15 @@
                   {% if user.is_authenticated %}
                 <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'org-list' %}">List Orgs</a>
                 <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'org-search' %}">Search Orgs</a>
+                {% if perms.web.add_org %}
                 <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'org-create' %}">New Org</a>
+                {% endif %}
                 <br>
                 <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'asset-list' %}">List Assets</a>
                 <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'asset-search' %}">Search Assets</a>
+                {% if perms.web.add_asset %}
                 <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'asset-create' %}">New Asset</a>
+                {% endif %}
                 <br>
                 <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'api-root' %}">API Explore</a>
                 <a class="btn btn-secondary btn-sm mt-1 mb-1" href="/api/docs/">API Docs</a>

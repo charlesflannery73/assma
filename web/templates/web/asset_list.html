@@ -11,7 +11,7 @@
             <th>Comment</th>
             <th>Created</th>
             <th>Modified</th>
-            {% if user.is_authenticated %}
+            {% if perms.web.delete_asset %}
             <th>Modify</th>
             {% endif %}
         </tr>
@@ -23,7 +23,7 @@
             <td>{{object.comment|linebreaks}}</td>
             <td>{{object.created|date:"Y-m-d H:i:s"}}</td>
             <td>{{object.modified|date:"Y-m-d H:i:s"}}</td>
-            {% if user.is_authenticated %}
+            {% if perms.web.delete_asset %}
             <td><a href="{% url 'asset-update' object.id %}">update</a>
                 <a href="{% url 'asset-delete' object.id %}">delete</a>
             </td>

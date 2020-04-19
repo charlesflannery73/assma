@@ -40,6 +40,7 @@ pip install -r requirements.txt
 python manage.py makemigrations
 python manage.py migrate
 python manage.py createsuperuser
+python manage.py loaddata groups
 ```
 
 create  production .env file if deploying to production
