@@ -13,8 +13,8 @@ from .views import (
     AssetDeleteView,
     AssetSearch,
     HomeView,
+    AboutView,
 )
-from . import views
 
 urlpatterns = [
     path('', HomeView.as_view(), name='assma-home'),
@@ -28,7 +28,7 @@ urlpatterns = [
     path('asset/new/', AssetCreateView.as_view(), name='asset-create'),
     path('asset/<int:pk>/update/', AssetUpdateView.as_view(), name='asset-update'),
     path('asset/<int:pk>/delete/', AssetDeleteView.as_view(), name='asset-delete'),
-    path('about/', views.about, name='assma-about'),
+    path('about/', AboutView.as_view(), name='assma-about'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

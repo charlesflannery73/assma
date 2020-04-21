@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 import environ
+from logging.handlers import SysLogHandler
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -145,4 +146,39 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
     ]
+}
+
+
+LOGGING = {
+   'version': 1,
+   'disable_existing_loggers': True,
+   'formatters': {
+      'basic': {
+         'format':'assma: %(message)s',
+       },
+    },
+
+   'handlers': {
+      'syslog': {
+         'level': 'DEBUG',
+         'class': 'logging.handlers.SysLogHandler',
+         'facility': 'local7',
+         'formatter': 'basic',
+         'address': '/dev/log',
+       },
+   },
+
+   'loggers': {
+      'web':{
+         'handlers': ['syslog'],
+         'propagate': True,
+         'level': 'INFO',
+       },
+       'django': {
+           'handlers': ['syslog'],
+           'level': 'INFO',
+           'disabled': False,
+           'propagate': True
+       }
+   }
 }

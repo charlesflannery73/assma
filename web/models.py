@@ -10,11 +10,9 @@ class Org(models.Model):
 
     LEVEL_NATIONAL = 'National'
     LEVEL_EMIRATE = 'Emirate'
-    LEVEL_OTHER = 'Other'
     LEVEL = [
         (LEVEL_NATIONAL, 'Federal / National level'),
         (LEVEL_EMIRATE, 'Emirate level (Abu Dhabi, Dubai, Sharjah, etc)'),
-        (LEVEL_OTHER, 'Other level'),
     ]
 
     SECTOR_ENERGY = 'Energy, Utilities, Agriculture'
@@ -29,7 +27,6 @@ class Org(models.Model):
     SECTOR_SPECIAL = 'Special'
     SECTOR_HEALTH = 'Healthcare'
     SECTOR_MANUFACTURING = 'Manufacturing, Construction'
-    SECTOR_OTHER = 'Other'
     SECTOR = [
         (SECTOR_ENERGY, 'Energy, Utilities, Agriculture'),
         (SECTOR_SECURITY, 'Safety and Security'),
@@ -43,12 +40,11 @@ class Org(models.Model):
         (SECTOR_SPECIAL, 'Special'),
         (SECTOR_HEALTH, 'Healthcare'),
         (SECTOR_MANUFACTURING, 'Manufacturing, Construction'),
-        (SECTOR_OTHER, 'Other'),
     ]
 
     name = models.CharField(max_length=255, null=False, unique=True)
-    level = models.CharField(max_length=255, choices=LEVEL, default=LEVEL_OTHER)
-    sector = models.CharField(max_length=255, choices=SECTOR, default=SECTOR_OTHER)
+    level = models.CharField(max_length=255, choices=LEVEL, default=LEVEL_NATIONAL)
+    sector = models.CharField(max_length=255, choices=SECTOR, default=SECTOR_ADMIN)
     tier = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)], default=5)
     comment = models.TextField(null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
