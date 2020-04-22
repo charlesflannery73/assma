@@ -174,6 +174,11 @@ LOGGING = {
          'propagate': True,
          'level': 'INFO',
        },
+       'users': {
+           'handlers': ['syslog'],
+           'propagate': True,
+           'level': 'INFO',
+       },
        'django': {
            'handlers': ['syslog'],
            'level': 'INFO',
