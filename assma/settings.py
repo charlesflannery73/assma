@@ -187,3 +187,7 @@ LOGGING = {
        }
    }
 }
+
+# Inactivity timer (3 days)
+SESSION_COOKIE_AGE = 259200
+SESSION_SAVE_EVERY_REQUEST = True
