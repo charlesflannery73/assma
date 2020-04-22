@@ -10,6 +10,8 @@ from django.db.models import Q
 from django.urls import reverse
 import ipaddress
 import logging
+from django.contrib import messages
+
 
 logger = logging.getLogger(__name__)
 
@@ -161,16 +163,21 @@ class OrgDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView, Vie
     success_url = '/'
     permission_required = ('web.delete_org')
 
-    def delete(self, *args, **kwargs):
+    def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
         name = self.object.name
+        pk = self.object.id
+        assets = Asset.objects.filter(org=pk)
+        if assets:
+            messages.warning(request, 'Cannot delete the org "' + name + '" while it has assets.')
+            return HttpResponseRedirect(reverse('asset-list') +'?org=%s' % name)
         sector = self.object.sector
         level = self.object.level
         tier = self.object.tier
         comment = self.object.comment
         data = "name=" + name + ", sector=" + sector + ", level=" + level + ", tier=" + str(tier) + ", comment=" + comment
         logger.info("user=" + str(self.request.user) + ", action=delete_org, data=[" + data + "]")
-        return super(OrgDeleteView, self).delete(*args, **kwargs)
+        return super(OrgDeleteView, self).delete(request, *args, **kwargs)
 
 
 class AssetListView(LoginRequiredMixin, ListView):
