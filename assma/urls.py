@@ -1,5 +1,7 @@
 from django.contrib import admin
 from django.urls import path, include
+from django.conf.urls.static import static
+from django.conf import settings
 
 
 urlpatterns = [
@@ -7,4 +9,4 @@ urlpatterns = [
     path('users/', include('users.urls')),
     path('', include('web.urls')),
     path('', include('api.urls')),
-]
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
