@@ -64,6 +64,13 @@ create .env file
 SECRET_KEY=my-super-secret-key-erlksduhiuyhwnci4nu9576w7vtysueh-change-me
 DEBUG=False
 ALLOWED_HOSTS='*'
+SECURE_SSL_REDIRECT=True
+SESSION_COOKIE_SECURE=True
+CSRF_COOKIE_SECURE=True
+
+SECURE_HSTS_SECONDS=60
+SECURE_HSTS_INCLUDE_SUBDOMAINS=True
+SECURE_HSTS_PRELOAD=True
 
 DB_ENGINE=django.db.backends.mysql
 DB_NAME=assma
