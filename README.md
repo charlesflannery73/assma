@@ -91,7 +91,10 @@ python manage.py createsuperuser
 
 # setup gunicorn
 ## create daemon file
- /etc/systemd/system/gunicorn.service
+/etc/systemd/system/gunicorn.service
+ 
+suggested number of workers is 2 * n + 1 where n = number of cores
+
 ```
 [Unit]
 Description=gunicorn service
@@ -101,7 +104,7 @@ After=network.target
 User=assmauser
 Group=www-data
 WorkingDirectory=/home/assmauser/assma/assma
-ExecStart=/home/assmauser/assma/.venv/bin/gunicorn --access-logfile - --workers 3 --chdir /home/assmauser/assma --bind unix:/home/assmauser/assma/assma/assma.sock assma.wsgi:application
+ExecStart=/home/assmauser/assma/.venv/bin/gunicorn --access-logfile - --workers 5 --chdir /home/assmauser/assma --bind unix:/home/assmauser/assma/assma/assma.sock assma.wsgi:application
 
 [Install]
 WantedBy=multi-user.target
@@ -115,32 +118,76 @@ systemctl start gunicorn
 systemctl status gunicorn
 
 ```
+
+# create self-signed certificate
+```
+sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/nginx-selfsigned.key -out /etc/ssl/certs/nginx-selfsigned.crt
+sudo openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048
+```
+
+
 # nginx setup
-create file 
-/etc/nginx/sites-available/assma
+create file /etc/nginx/snippets/self-signed.conf
+```
+ssl_certificate /etc/ssl/certs/nginx-selfsigned.crt;
+ssl_certificate_key /etc/ssl/private/nginx-selfsigned.key;
+```
+
+create file /etc/nginx/snippets/ssl-params.conf
+```
+# from https://cipherli.st/
+# and https://raymii.org/s/tutorials/Strong_SSL_Security_On_nginx.html
+
+ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+ssl_prefer_server_ciphers on;
+ssl_ciphers "EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH";
+ssl_ecdh_curve secp384r1;
+ssl_session_cache shared:SSL:10m;
+ssl_session_tickets off;
+ssl_stapling on;
+ssl_stapling_verify on;
+resolver 8.8.8.8 8.8.4.4 valid=300s;
+resolver_timeout 5s;
+# Disable preloading HSTS for now.  You can use the commented out header line that includes
+# the "preload" directive if you understand the implications.
+#add_header Strict-Transport-Security "max-age=63072000; includeSubdomains; preload";
+add_header Strict-Transport-Security "max-age=63072000; includeSubdomains";
+add_header X-Frame-Options DENY;
+add_header X-Content-Type-Options nosniff;
+
+ssl_dhparam /etc/ssl/certs/dhparam.pem;
+```
+
+create file /etc/nginx/sites-available/assma
 ```
 server {
-       listen 80;
+       listen 80 default_server;
        server_name 127.0.0.1;
-       location = /static/favicon.ico {access_log off;log_not_found off;}
+       return 301 https://$server_name$request_uri;
+}
+
+server {
+       listen 443 ssl http2 default_server;
+       include snippets/self-signed.conf;
+       include snippets/ssl-params.conf;
 
        location /static/ {
-            root /home/assmauser/assma;    
+            root /home/assmauser/assma;
        }
 
        location /media/ {
-            root /home/assmauser/assma;    
+            root /home/assmauser/assma;
        }
-       
+
        location / {
             include proxy_params;
-            proxy_pass http://unix:/home/eassmauser/assma/assma/assma.sock;
+            proxy_pass http://unix:/home/assmauser/assma/assma/assma.sock;
        }
 }
-
 ```
 
 ```
+rm /etc/nginx/sites-enabled/default
 ln -s /etc/nginx/sites-available/assma /etc/nginx/sites-enabled/assma
 nginx -t
 ufw allow 'Nginx Full'

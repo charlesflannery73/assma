@@ -1,4 +1,36 @@
 {% extends "base.html" %}
 {% block content %}
     <h1>Assma About Page</h1>
+
+<h3>API Quick start guide</h3>
+List all assets<br>
+curl -s -k -H "Authorization: Token api-key"  -H "content-type: application/json" https://hostname:port/api/v1/asset/<br>
+<br>
+List all orgs<br>
+curl -s -k -H "Authorization: Token api-key"  -H "content-type: application/json" https://hostname:port/api/v1/org/<br>
+<br>
+List one asset - by asset_id<br>
+curl -s -k -H "Authorization: Token api-key"  -H "content-type: application/json" https://hostname:port/api/v1/asset/1/<br>
+<br>
+List one org by org id<br>
+curl -s -k -H "Authorization: Token api-key"  -H "content-type: application/json" https://hostname:port/api/v1/org/1/<br>
+<br>
+Search orgs (exact match) by name, id, level, tier, (partial match) by name_like, comment<br>
+curl -s -k -H "Authorization: Token api-key"  -H "content-type: application/json" https://hostname:port/api/v1/org/?name=1.2.3.4<br>
+<br>
+Search assets (exact match) by org, org_id, name, id, type, (partial match) by org_like, name_like, comment<br>
+curl -s -k -H "Authorization: Token api-key"  -H "content-type: application/json" https://hostname:port/api/v1/asset/?type=ipv4<br>
+<br>
+Create new org<br>
+curl -X POST -s -k -H "Authorization: Token api-key"  -H "content-type: application/json" http://127.0.0.1:8000/api/v1/org/ -d '{"name":"new org 25", "level": "National", "sector": "ICT", "Tier": 5, "comment": "hi"}'<br>
+<br>
+Create new asset (must know the org_id)<br>
+curl -X POST -s -k -H "Authorization: Token api-key"  -H "content-type: application/json" http://127.0.0.1:8000/api/v1/asset/ -d '{"name":"8.8.8.8", "type":"ipv4", "org":5}'<br>
+<br>
+Delete asset by org id<br>
+curl -X DELETE -s -k -H "Authorization: Token api-key"  -H "content-type: application/json" http://127.0.0.1:8000/api/v1/org/5/<br>
+<br>
+Delete asset by asset id<br>
+curl -X DELETE -s -k -H "Authorization: Token api-key"  -H "content-type: application/json" http://127.0.0.1:8000/api/v1/asset/7/<br>
+
 {% endblock content %}
