@@ -49,6 +49,7 @@ exit;
 ```
 sudo adduser assmauser -g nginx
 sudo passwd -d assmauser
+chmod 710 /home/assmauser
 sudo su - assmauser
 ```
 ## Install assma
@@ -71,10 +72,6 @@ ALLOWED_HOSTS='*'
 SECURE_SSL_REDIRECT=True
 SESSION_COOKIE_SECURE=True
 CSRF_COOKIE_SECURE=True
-
-SECURE_HSTS_SECONDS=60
-SECURE_HSTS_INCLUDE_SUBDOMAINS=True
-SECURE_HSTS_PRELOAD=True
 
 DB_ENGINE=django.db.backends.mysql
 DB_NAME=assma
@@ -196,8 +193,6 @@ server {
 ```
 
 
-
-
 # centos comment out the default server block
 edit /etc/nginx/nginx.conf
 ```
@@ -226,7 +221,8 @@ edit /etc/nginx/nginx.conf
 
 ```
 nginx -t
-systemctl restart nginx
+systemctl enable nginx
+systemctl start nginx
 ```
 
 # firewall - allow http/s

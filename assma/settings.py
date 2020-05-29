@@ -52,7 +52,7 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # 'django.middleware.clickjacking.XFrameOptionsMiddleware',    this is covered by nginx config
 ]
 
 ROOT_URLCONF = 'assma.urls'
@@ -198,7 +198,10 @@ SESSION_COOKIE_SECURE = env.bool('SESSION_COOKIE_SECURE', False)
 CSRF_COOKIE_SECURE = env.bool('CSRF_COOKIE_SECURE', False)
 SECURE_REFERRER_POLICY = "same-origin"
 
-SECURE_HSTS_SECONDS = env.int("SECURE_HSTS_SECONDS", 0)
-SECURE_HSTS_INCLUDE_SUBDOMAINS = env.bool("SECURE_HSTS_INCLUDE_SUBDOMAINS", False)
-SECURE_HSTS_PRELOAD = env.bool("SECURE_HSTS_PRELOAD", False)
+# these set in nginx.conf so they include the static and media files as well
+#SECURE_HSTS_SECONDS = env.int("SECURE_HSTS_SECONDS", 0)
+#SECURE_HSTS_INCLUDE_SUBDOMAINS = env.bool("SECURE_HSTS_INCLUDE_SUBDOMAINS", False)
+#SECURE_HSTS_PRELOAD = env.bool("SECURE_HSTS_PRELOAD", False)
 
+# this setting is in nginx.conf so turning it off here so duplicate http headers aren't sent
+SECURE_CONTENT_TYPE_NOSNIFF = False
