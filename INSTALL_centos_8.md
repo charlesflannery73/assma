@@ -48,8 +48,8 @@ exit;
 ##Create assmauser
 ```
 sudo adduser assmauser -g nginx
-sudo passwd -d assmauser
-chmod 710 /home/assmauser
+cat /dev/urandom | tr -dc a-zA-Z0-9 | fold -w 32 | head -n 1 | sudo passwd --stdin assmauser
+sudo chmod 710 /home/assmauser
 sudo su - assmauser
 ```
 ## Install assma
@@ -91,6 +91,7 @@ python manage.py createsuperuser
 ```
 
 # setup gunicorn
+ switch to root user
 ## create daemon file
 /etc/systemd/system/gunicorn.service
  
@@ -110,6 +111,18 @@ ExecStart=/home/assmauser/assma/.venv/bin/gunicorn --access-logfile - --workers 
 [Install]
 WantedBy=multi-user.target
 ```
+# selinux
+edit /etc/selinux/config
+
+set to permissive or if you are game, configure it properly to use selinux
+````
+SELINUX=permissive
+````
+
+To change selinux without a reboot run
+```
+setenforce 0
+```
 
 ## start gunicorn daemon
 ```
@@ -117,7 +130,6 @@ systemctl daemon-reload
 systemctl enable gunicorn
 systemctl start gunicorn
 systemctl status gunicorn
-
 ```
 
 # create self-signed certificate
@@ -128,7 +140,7 @@ sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/privat
 openssl dhparam -out /etc/pki/tls/certs/dhparam.pem 2048
 ```
 
-# nginx setup for Centos
+# nginx setup
 create file /etc/nginx/conf.d/ssl.conf
 ```
 server {
@@ -193,7 +205,7 @@ server {
 ```
 
 
-# centos comment out the default server block
+# comment out the default server block
 edit /etc/nginx/nginx.conf
 ```
 #    server {
@@ -231,4 +243,10 @@ sudo firewall-cmd --permanent --add-service=http
 sudo firewall-cmd --permanent --add-service=https
 sudo firewall-cmd --permanent --list-all
 sudo firewall-cmd --reload
+```
+
+
+Reboot
+```
+sudo reboot
 ```

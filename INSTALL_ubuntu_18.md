@@ -5,7 +5,7 @@ https://www.shellvoide.com/hacks/installing-django-application-with-nginx-mysql-
 
 # Install dependant packages for Ubuntu 18.04
 ```
-sudo apt-get install python3-venv nginx mysql-server python3-pip libmysqlclient-dev ufw
+sudo apt-get install python3-venv nginx mysql-server python3-pip libmysqlclient-dev ufw -y
 ```
 
 # For development
@@ -27,7 +27,7 @@ python manage.py runserver
 ```
 sudo mysql_secure_installation
 ```
-+ validate password component (if asked)
++ validate password component
 + set root password
 + remove anonymous users
 + disallow root login remotely
@@ -45,7 +45,7 @@ exit;
 ##Create assmauser
 ```
 sudo adduser --disabled-password assmauser -ingroup www-data
-chmod 710 /home/assmauser
+sudo chmod 710 /home/assmauser
 sudo su - assmauser
 ```
 ## Install assma
@@ -118,10 +118,8 @@ systemctl status gunicorn
 
 # create self-signed certificate
 ```
-sudo mkdir /etc/ssl/private
-sudo chmod 700 /etc/ssl/private
 sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/nginx-selfsigned.key -out /etc/ssl/certs/nginx-selfsigned.crt
-openssl dhparam -out /etc/pki/tls/certs/dhparam.pem 2048
+sudo openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048
 ```
 
 # nginx setup
