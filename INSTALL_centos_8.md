@@ -6,7 +6,7 @@ https://www.digitalocean.com/community/tutorials/how-to-set-up-django-with-postg
 # Install dependant packages for Centos 8
 ```
 sudo dnf install epel-release -y
-sudo dnf install python3-virtualenv nginx mysql-server python3-pip mysql-devel gcc ufw git -y
+sudo dnf install python3-virtualenv nginx mysql-server python3-pip mysql-devel gcc ufw git unzip -y
 ```
 
 # For development
@@ -16,6 +16,7 @@ git clone https://github.com/charlesflannery73/assma
 cd assma
 python3 -m venv .venv --prompt assma
 source .venv/bin/activate
+pip install --upgrade pip
 pip install -r requirements.txt
 python manage.py makemigrations
 python manage.py migrate
@@ -52,13 +53,21 @@ cat /dev/urandom | tr -dc a-zA-Z0-9 | fold -w 32 | head -n 1 | sudo passwd --std
 sudo chmod 710 /home/assmauser
 sudo su - assmauser
 ```
+
 ## Install assma
 ```
-git clone https://github.com/charlesflannery73/assma
+# copy assma_bundle.zip to assmauser home dir
+unzip assma_bundle.zip
 cd assma
 python3 -m venv .venv --prompt assma
 source .venv/bin/activate
+pip install --upgrade pip
+
+# if connected to internet
 pip install -r requirements.txt
+
+# if offline
+pip install --no-index --find-links="~/assma_packages" -r requirements.txt
 ```
 
 create .env file

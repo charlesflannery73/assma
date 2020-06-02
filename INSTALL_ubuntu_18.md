@@ -5,7 +5,7 @@ https://www.shellvoide.com/hacks/installing-django-application-with-nginx-mysql-
 
 # Install dependant packages for Ubuntu 18.04
 ```
-sudo apt-get install python3-venv nginx mysql-server python3-pip libmysqlclient-dev ufw -y
+sudo apt-get install python3-venv nginx mysql-server python3-pip libmysqlclient-dev ufw unzip gcc libpq-dev python-dev python-pip -y
 ```
 
 # For development
@@ -15,6 +15,7 @@ git clone https://github.com/charlesflannery73/assma
 cd assma
 python3 -m venv .venv --prompt assma
 source .venv/bin/activate
+pip install --upgrade pip
 pip install -r requirements.txt
 python manage.py makemigrations
 python manage.py migrate
@@ -50,11 +51,18 @@ sudo su - assmauser
 ```
 ## Install assma
 ```
-git clone https://github.com/charlesflannery73/assma
+# copy assma_bundle.zip to assmauser home dir
+unzip assma_bundle.zip
 cd assma
 python3 -m venv .venv --prompt assma
 source .venv/bin/activate
+pip install --upgrade pip
+
+# if connected to internet
 pip install -r requirements.txt
+
+# if offline
+pip install --no-index --find-links="~/assma_packages" -r requirements.txt
 ```
 
 create .env file
