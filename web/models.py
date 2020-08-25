@@ -46,7 +46,7 @@ class Org(models.Model):
     level = models.CharField(max_length=255, choices=LEVEL, default=LEVEL_NATIONAL)
     sector = models.CharField(max_length=255, choices=SECTOR, default=SECTOR_ADMIN)
     tier = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)], default=5)
-    comment = models.TextField(null=True, blank=True)
+    comment = models.TextField(blank=True)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
 
@@ -77,9 +77,9 @@ class Asset(models.Model):
     name = models.CharField(max_length=255, null=False, unique=True)
     org = models.ForeignKey(Org, on_delete=models.PROTECT)
     type = models.CharField(max_length=255, choices=TYPE)
-    start_ip = models.UUIDField(null=True, blank=True)
-    end_ip = models.UUIDField(null=True, blank=True)
-    comment = models.TextField(null=True, blank=True)
+    start_ip = models.UUIDField(blank=True)
+    end_ip = models.UUIDField(blank=True)
+    comment = models.TextField(blank=True)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
 

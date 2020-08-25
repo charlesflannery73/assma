@@ -63,7 +63,7 @@ class AssetSearch(LoginRequiredMixin, SearchListView):
             org = form.cleaned_data['search_org']
             type = form.cleaned_data['search_type']
             comment = form.cleaned_data['search_comment']
-            params = "name=" + name + "&org=" + org + "&type=" + type + "&comment=" + str(comment)
+            params = "name=" + name + "&org=" + org + "&type=" + type + "&comment=" + comment
             logger.info("user=" + str(self.request.user) + ", action=search_assets, data=[" + params + "]")
             return HttpResponseRedirect(reverse('asset-list') +'?%s' % params)
 
@@ -90,7 +90,7 @@ class OrgSearch(LoginRequiredMixin, SearchListView):
             if coid == None:
                 coid = ""
             comment = form.cleaned_data['search_comment']
-            params = "name=" + name + "&sector=" + sector + "&level=" + level + "&comment=" + str(comment) + "&tier=" + str(tier) + "&coid=" + str(coid)
+            params = "name=" + name + "&sector=" + sector + "&level=" + level + "&comment=" + comment + "&tier=" + str(tier) + "&coid=" + str(coid)
             logger.info("user=" + str(self.request.user) + ", action=search_orgs, data=[" + params + "]")
             return HttpResponseRedirect(reverse('org-list') +'?%s' % params)
 
@@ -136,7 +136,7 @@ class OrgCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
         level = form.cleaned_data['level']
         tier = form.cleaned_data['tier']
         comment = form.cleaned_data['comment']
-        data = "name=" + name + ", sector=" + sector + ", level=" + level + ", tier=" + str(tier) + ", comment=" + str(comment)
+        data = "name=" + name + ", sector=" + sector + ", level=" + level + ", tier=" + str(tier) + ", comment=" + comment
         logger.info("user=" + str(self.request.user) + ", action=create_org, data=[" + data + "]")
         return super().form_valid(form)
 
@@ -153,7 +153,7 @@ class OrgUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
         level = form.cleaned_data['level']
         tier = form.cleaned_data['tier']
         comment = form.cleaned_data['comment']
-        data = "name=" + name + ", sector=" + sector + ", level=" + level + ", tier=" + str(tier) + ", comment=" + str(comment)
+        data = "name=" + name + ", sector=" + sector + ", level=" + level + ", tier=" + str(tier) + ", comment=" + comment
         logger.info("user=" + str(self.request.user) + ", action=update_org, data=[" + data + "]")
         return super().form_valid(form)
 
@@ -175,7 +175,7 @@ class OrgDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView, Vie
         level = self.object.level
         tier = self.object.tier
         comment = self.object.comment
-        data = "name=" + name + ", sector=" + sector + ", level=" + level + ", tier=" + str(tier) + ", comment=" + str(comment)
+        data = "name=" + name + ", sector=" + sector + ", level=" + level + ", tier=" + str(tier) + ", comment=" + comment
         logger.info("user=" + str(self.request.user) + ", action=delete_org, data=[" + data + "]")
         return super(OrgDeleteView, self).delete(request, *args, **kwargs)
 
@@ -231,7 +231,7 @@ class AssetCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
         org = form.cleaned_data['org']
         type = form.cleaned_data['type']
         comment = form.cleaned_data['comment']
-        data = "name=" + name + ", org=" + str(org) + ", type=" + type + ", comment=" + str(comment)
+        data = "name=" + name + ", org=" + str(org) + ", type=" + type + ", comment=" + comment
         logger.info("user=" + str(self.request.user) + ", action=create_asset, data=[" + data + "]")
         return super().form_valid(form)
 
@@ -247,7 +247,7 @@ class AssetUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
         org = form.cleaned_data['org']
         type = form.cleaned_data['type']
         comment = form.cleaned_data['comment']
-        data = "name=" + name + ", org=" + str(org) + ", type=" + type + ", comment=" + str(comment)
+        data = "name=" + name + ", org=" + str(org) + ", type=" + type + ", comment=" + comment
         logger.info("user=" + str(self.request.user) + ", action=update_asset, data=[" + data + "]")
         return super().form_valid(form)
 
@@ -263,6 +263,6 @@ class AssetDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
         org = self.object.org
         type = self.object.type
         comment = self.object.comment
-        data = "name=" + name + ", org=" + str(org) + ", type=" + type + ", comment=" + str(comment)
+        data = "name=" + name + ", org=" + str(org) + ", type=" + type + ", comment=" + comment
         logger.info("user=" + str(self.request.user) + ", action=delete_asset, data=[" + data + "]")
         return super(AssetDeleteView, self).delete(*args, **kwargs)
