@@ -209,16 +209,26 @@ class AssetListView(LoginRequiredMixin, ListView):
             ).order_by('name')
             return new_context
         except:
-            new_context = Asset.objects.filter(
-                (
-                    Q(name__icontains=name_val) &
-                    Q(org__name__icontains=org_val) &
-                    Q(type__icontains=type_val) &
-                    Q(comment__icontains=comment_val)) |
-                Q(comment__icontains=name_val)
+            if name_val:
+                new_context = Asset.objects.filter(
+                    (
+                        Q(name__icontains=name_val) &
+                        Q(org__name__icontains=org_val) &
+                        Q(type__icontains=type_val) &
+                        Q(comment__icontains=comment_val)) |
+                    Q(comment__icontains=name_val)
+                ).order_by('name')
+                return new_context
+            else:
+                new_context = Asset.objects.filter(
+                    (
+                            Q(name__icontains=name_val) &
+                            Q(org__name__icontains=org_val) &
+                            Q(type__icontains=type_val) &
+                            Q(comment__icontains=comment_val))
+                ).order_by('name')
+                return new_context
 
-            ).order_by('name')
-            return new_context
 
 class AssetCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = Asset
