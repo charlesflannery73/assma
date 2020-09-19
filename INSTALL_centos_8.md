@@ -25,11 +25,13 @@ python manage.py createsuperuser
 python manage.py runserver
 ```
 # For deployment
-##Setup MySql
+## Setup MySql
 ```
 sudo systemctl enable mysqld
 sudo systemctl start mysqld
-sudo mysql_secure_installation
+
+# secure installation unnecessary for mysql 5.7 and later. it installs secure by default with no root password, auth_socket login only
+# sudo mysql_secure_installation
 ```
 + validate password component
 + set root password
@@ -46,7 +48,7 @@ GRANT ALL ON assma.* TO 'assmauser'@'localhost';
 ALTER DATABASE assma CHARACTER SET 'utf8';
 exit;
 ```
-##Create assmauser
+## Create assmauser
 ```
 sudo adduser assmauser -g nginx
 cat /dev/urandom | tr -dc a-zA-Z0-9 | fold -w 32 | head -n 1 | sudo passwd --stdin assmauser
@@ -64,6 +66,7 @@ source .venv/bin/activate
 pip install --upgrade pip
 
 # if connected to internet
+pip install --upgrade pip
 pip install -r requirements.txt
 
 # if offline
@@ -123,7 +126,7 @@ WantedBy=multi-user.target
 # selinux
 edit /etc/selinux/config
 
-set to permissive or if you are game, configure it properly to use selinux
+set to permissive. Or if you are game, configure it properly to use selinux
 ````
 SELINUX=permissive
 ````

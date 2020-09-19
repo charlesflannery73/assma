@@ -24,9 +24,10 @@ python manage.py createsuperuser
 python manage.py runserver
 ```
 # For deployment
-##Setup MySql
+## Setup MySql
 ```
-sudo mysql_secure_installation
+# secure installation unnecessary for mysql 5.7 and later. it installs secure by default with no root password, auth_socket login only
+# sudo mysql_secure_installation
 ```
 + validate password component
 + set root password
@@ -43,7 +44,7 @@ GRANT ALL ON assma.* TO 'assmauser'@'localhost';
 ALTER DATABASE assma CHARACTER SET 'utf8';
 exit;
 ```
-##Create assmauser
+## Create assmauser
 ```
 sudo adduser --disabled-password assmauser -ingroup www-data
 sudo chmod 710 /home/assmauser
@@ -59,6 +60,7 @@ source .venv/bin/activate
 pip install --upgrade pip
 
 # if connected to internet
+pip install --upgrade pip
 pip install -r requirements.txt
 
 # if offline
