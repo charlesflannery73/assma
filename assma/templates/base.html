@@ -55,22 +55,23 @@
             <p class='text-muted'>Quick links
               <ul class="list-group">
                   {% if user.is_authenticated %}
-                <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'org-list' %}">List Orgs</a>
-                <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'org-search' %}">Search Orgs</a>
+                <a class="btn btn-secondary btn-color btn-sm mt-1 mb-1" href="{% url 'org-list' %}">List Orgs</a>
+                <a class="btn btn-secondary btn-color btn-sm mt-1 mb-1" href="{% url 'org-search' %}">Search Orgs</a>
                 {% if perms.web.add_org %}
-                <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'org-create' %}">New Org</a>
+                <a class="btn btn-secondary btn-color btn-sm mt-1 mb-1" href="{% url 'org-create' %}">New Org</a>
                 {% endif %}
                 <br>
-                <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'asset-list' %}">List Assets</a>
-                <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'asset-search' %}">Search Assets</a>
+                <a class="btn btn-secondary btn-color btn-sm mt-1 mb-1" href="{% url 'asset-list' %}">List Assets</a>
+                <a class="btn btn-secondary btn-color btn-sm mt-1 mb-1" href="{% url 'asset-search' %}">Search Assets</a>
                 {% if perms.web.add_asset %}
-                <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'asset-create' %}">New Asset</a>
+                <a class="btn btn-secondary btn-color btn-sm mt-1 mb-1" href="{% url 'asset-create' %}">New Asset</a>
                 {% endif %}
                 <br>
-                <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'api-root' %}">API Explore</a>
-                <a class="btn btn-secondary btn-sm mt-1 mb-1" href="/api/docs/">API Docs</a>
-                <a class="btn btn-secondary btn-sm mt-1 mb-1" href="/api/schema">API Schema</a>
-                <a class="btn btn-secondary btn-sm mt-1 mb-1" href="/api/docs/#users-api-token-auth-create">API Token</a>
+                <a class="btn btn-secondary btn-color btn-sm mt-1 mb-1" href="
+">API Explore</a>
+                <a class="btn btn-secondary btn-color btn-sm mt-1 mb-1" href="/api/docs/">API Docs</a>
+                <a class="btn btn-secondary btn-color btn-sm mt-1 mb-1" href="/api/schema">API Schema</a>
+                <a class="btn btn-secondary btn-color btn-sm mt-1 mb-1" href="/api/docs/#users-api-token-auth-create">API Token</a>
                   {% endif %}
               </ul>
             </p>
