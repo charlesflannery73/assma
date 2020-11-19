@@ -118,7 +118,7 @@ class OrgListView(LoginRequiredMixin, ListView):
             Q(sector__icontains=sector_val) &
             Q(level__icontains=level_val) &
             Q(tier__icontains=tier_val) &
-            Q(id__icontains=id_val) &
+            Q(id__exact=id_val) &
             Q(comment__icontains=comment_val)
         ).order_by('name')
         return new_context
