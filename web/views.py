@@ -84,9 +84,9 @@ class OrgSearch(LoginRequiredMixin, SearchListView):
             sector = form.cleaned_data['search_sector']
             level = form.cleaned_data['search_level']
             tier = form.cleaned_data['search_tier']
+            coid = form.cleaned_data['search_id']
             if tier == None:
                 tier = ""
-            coid = form.cleaned_data['search_id']
             if coid == None:
                 coid = ""
             comment = form.cleaned_data['search_comment']
@@ -117,10 +117,16 @@ class OrgListView(LoginRequiredMixin, ListView):
             Q(name__icontains=name_val) &
             Q(sector__icontains=sector_val) &
             Q(level__icontains=level_val) &
-            Q(tier__icontains=tier_val) &
-            Q(id__exact=id_val) &
             Q(comment__icontains=comment_val)
         ).order_by('name')
+        if self.request.GET.get('tier') != '':
+            new_context = new_context.filter(
+                Q(tier__exact=tier_val)
+            )
+        if self.request.GET.get('coid') != '':
+            new_context = new_context.filter(
+                Q(id__exact=id_val)
+            )
         return new_context
 
 

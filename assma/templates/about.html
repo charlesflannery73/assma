@@ -22,7 +22,7 @@ Search assets (exact match) by org, org_id, name, id, type, (partial match) by o
 curl -s -k -H "Authorization: Token your-api-key"  -H "content-type: application/json" https://hostname:port/api/v1/asset/?type=ipv4<br>
 <br>
 Create new org<br>
-curl -X POST -s -k -H "Authorization: Token your-api-key"  -H "content-type: application/json" http://127.0.0.1:8000/api/v1/org/ -d '{"name":"new org 25", "level": "National", "sector": "ICT", "Tier": 5, "comment": "hi"}'<br>
+curl -X POST -s -k -H "Authorization: Token your-api-key"  -H "content-type: application/json" http://127.0.0.1:8000/api/v1/org/ -d '{"name":"new org 25", "level": "National", "sector": "ICT", "tier": 5, "comment": "hi"}'<br>
 <br>
 Create new asset (must know the org_id)<br>
 curl -X POST -s -k -H "Authorization: Token your-api-key"  -H "content-type: application/json" http://127.0.0.1:8000/api/v1/asset/ -d '{"name":"8.8.8.8", "type":"ipv4", "org":5}'<br>
