@@ -182,6 +182,9 @@ class Asset(models.Model):
             # remove blank lines
             comment = re.sub(r'^\s*$', '', comment, 0, re.MULTILINE)
 
+            self.start_ip = 0
+            self.end_ip = 0
+
             # move this code to an async task so the browser doesn't hang
             try:
                 lookup = socket.gethostbyname_ex(self.name)
