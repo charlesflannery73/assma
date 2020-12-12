@@ -110,12 +110,16 @@ class Asset(models.Model):
             self.end_ip = int(ipaddress.IPv6Address(self.name))
 
         if str(self.type) == "cidr4":
-            try:
-                ipaddress.IPv4Network(str(self.name))
-            except:
+            match = re.search('/', self.name,  )
+            if match:
+                try:
+                    ipaddress.IPv4Network(str(self.name))
+                except:
+                    raise ValidationError('\"' + self.name + '\" is not a valid ipv4 network address')
+                self.start_ip = int(ipaddress.IPv4Network(self.name)[0])
+                self.end_ip = int(ipaddress.IPv4Network(self.name)[-1])
+            else:
                 raise ValidationError('\"' + self.name + '\" is not a valid ipv4 cidr address')
-            self.start_ip = int(ipaddress.IPv4Network(self.name)[0])
-            self.end_ip = int(ipaddress.IPv4Network(self.name)[-1])
 
         if str(self.type) == "cidr6":
             try:
@@ -161,7 +165,7 @@ class Asset(models.Model):
                 raise ValidationError('\"' + self.name + '\" is not a valid range6 address, please use a hyphen as a separator eg 2001:db8::-2001:db8:0000:0000:0000:0000:0000:00ff')
 
         if str(self.type) == "netmask4":
-            match = re.search('/', self.name,  )
+            match = re.search('[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}/[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}', self.name,  )
             if match:
                 try:
                     ipaddress.IPv4Network(str(self.name))
