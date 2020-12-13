@@ -1,6 +1,9 @@
 {% extends "base.html"%}
 {% load crispy_forms_tags %}
 {% block content %}
+        {% if user.is_authenticated %}
+            <meta http-equiv = "refresh" content = "0; url = /" />
+        {% endif %}
         <div class="content-section">
             <form method="POST">
                 {% csrf_token %}

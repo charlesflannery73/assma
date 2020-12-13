@@ -30,9 +30,20 @@ class UserTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         response = self.client.get('/users/profile/')
         self.assertEqual(response.status_code, 302)
+        response = self.client.get('/users/password/')
+        self.assertEqual(response.status_code, 302)
+        response = self.client.get('/users/logout/')
+        self.assertEqual(response.status_code, 200)
+
 
     def test_pages_with_login(self):
         response = self.client.get('/users/login/')
         self.assertEqual(response.status_code, 200)
+        response = self.client.get('/users/login/', username='test', password='12test12')
+        self.assertEqual(response.status_code, 200)
         response = self.client.get('/users/profile/', username='test', password='12test12', follow=True)
+        self.assertEqual(response.status_code, 200)
+        response = self.client.get('/users/password/', username='test', password='12test12', follow=True)
+        self.assertEqual(response.status_code, 200)
+        response = self.client.get('/users/logout/', username='test', password='12test12', follow=True)
         self.assertEqual(response.status_code, 200)
