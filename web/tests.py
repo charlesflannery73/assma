@@ -1,6 +1,10 @@
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 from .models import Org, Asset
+from django.contrib.auth import get_user_model
+from django.contrib.auth import authenticate
+from django.contrib.auth.models import User, Permission, Group
+from django.test import Client
 
 class OrgTestCase(TestCase):
     def setUp(self):
@@ -67,3 +71,93 @@ class OrgTestCase(TestCase):
     def test_invalid_netmask4(self):
         with self.assertRaises(ValidationError):
             Asset.objects.create(name="1.1.1.0/24", org=Org(1), type="netmask4")
+
+    def test_pages_without_login(self):
+        response = self.client.get('/', follow=True)
+        self.assertRedirects(response, '/users/login/?next=/', status_code=302, target_status_code=200)
+        response = self.client.get('/about', follow=True)
+        self.assertRedirects(response, '/users/login/?next=/about/', status_code=301, target_status_code=200)
+        response = self.client.get('/admin', follow=True)
+        self.assertRedirects(response, '/admin/login/?next=/admin/', status_code=301, target_status_code=200)
+        response = self.client.get('/org', follow=True)
+        self.assertRedirects(response, '/users/login/?next=/org/', status_code=301, target_status_code=200)
+        response = self.client.get('/org/search/', follow=True)
+        self.assertRedirects(response, '/users/login/?next=/org/search/', status_code=302, target_status_code=200)
+        response = self.client.get('/org/new/', follow=True)
+        self.assertRedirects(response, '/users/login/?next=/org/new/', status_code=302, target_status_code=200)
+        response = self.client.get('/asset', follow=True)
+        self.assertRedirects(response, '/users/login/?next=/asset/', status_code=301, target_status_code=200)
+        response = self.client.get('/asset/search/', follow=True)
+        self.assertRedirects(response, '/users/login/?next=/asset/search/', status_code=302, target_status_code=200)
+        response = self.client.get('/asset/new/', follow=True)
+        self.assertRedirects(response, '/users/login/?next=/asset/new/', status_code=302, target_status_code=200)
+
+
+    def test_pages_with_read_only_login(self):
+        user = get_user_model().objects.create_user(username='test', password='12test12', email='test@example.com')
+        self.client.force_login(user=user)
+
+        response = self.client.get('/')
+        self.assertEqual(response.status_code, 200)
+
+        response = self.client.get('/about/')
+        self.assertEqual(response.status_code, 200)
+
+        response = self.client.get('/org/')
+        self.assertEqual(response.status_code, 200)
+        response = self.client.get('/org/search/')
+        self.assertEqual(response.status_code, 200)
+        response = self.client.get('/org/new/')
+        self.assertEqual(response.status_code, 403)
+        response = self.client.get('/org/1/update/')
+        self.assertEqual(response.status_code, 403)
+        response = self.client.get('/org/1/delete/')
+        self.assertEqual(response.status_code, 403)
+
+        response = self.client.get('/asset/')
+        self.assertEqual(response.status_code, 200)
+        response = self.client.get('/asset/search/')
+        self.assertEqual(response.status_code, 200)
+        response = self.client.get('/asset/new/')
+        self.assertEqual(response.status_code, 403)
+        response = self.client.get('/asset/1/update/')
+        self.assertEqual(response.status_code, 403)
+        response = self.client.get('/asset/1/delete/')
+        self.assertEqual(response.status_code, 403)
+
+
+    def test_pages_with_assma_manager_perms(self):
+        user = get_user_model().objects.create_user(username='manager', password='12test12', email='test@example.com')
+        user.user_permissions.add(29, 30, 31, 33, 34, 35)
+        user.save()
+        self.client.force_login(user=user)
+
+        response = self.client.get('/')
+        self.assertEqual(response.status_code, 200)
+
+        response = self.client.get('/about/')
+        self.assertEqual(response.status_code, 200)
+
+        response = self.client.get('/org/')
+        self.assertEqual(response.status_code, 200)
+        response = self.client.get('/org/search/')
+        self.assertEqual(response.status_code, 200)
+        response = self.client.get('/org/new/')
+        self.assertEqual(response.status_code, 200)
+        response = self.client.get('/org/1/update/')
+        self.assertEqual(response.status_code, 200)
+        response = self.client.get('/org/1/delete/')
+        self.assertEqual(response.status_code, 200)
+
+        response = self.client.get('/asset/')
+        self.assertEqual(response.status_code, 200)
+        response = self.client.get('/asset/search/')
+        self.assertEqual(response.status_code, 200)
+        response = self.client.get('/asset/new/')
+        self.assertEqual(response.status_code, 200)
+        response = self.client.get('/asset/1/update/')
+        self.assertEqual(response.status_code, 200)
+        response = self.client.get('/asset/1/delete/')
+        self.assertEqual(response.status_code, 200)
+
+
