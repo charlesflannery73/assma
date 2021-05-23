@@ -5,7 +5,7 @@ https://www.shellvoide.com/hacks/installing-django-application-with-nginx-mysql-
 
 # Install dependant packages for Ubuntu 20.04
 ```
-sudo apt-get install python3-venv nginx mysql-server python3-pip libmysqlclient-dev ufw unzip gcc libpq-dev python-dev -y
+sudo apt-get install python3-venv nginx mysql-server python3-pip default-libmysqlclient-dev ufw unzip gcc libpq-dev python3-dev -y
 ```
 
 # For development
