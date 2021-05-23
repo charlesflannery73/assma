@@ -57,7 +57,6 @@ unzip assma_bundle.zip
 cd assma
 python3 -m venv .venv --prompt assma
 source .venv/bin/activate
-pip install --upgrade pip
 
 # if connected to internet
 pip install --upgrade pip
