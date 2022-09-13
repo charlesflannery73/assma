@@ -8,11 +8,11 @@ import socket
 
 class Org(models.Model):
 
-    LEVEL_NATIONAL = 'National'
-    LEVEL_EMIRATE = 'Emirate'
+    LEVEL_FEDERAL = 'Federal'
+    LEVEL_STATE = 'State'
     LEVEL = [
-        (LEVEL_NATIONAL, 'Federal / National level'),
-        (LEVEL_EMIRATE, 'Emirate level (Abu Dhabi, Dubai, Sharjah, etc)'),
+        (LEVEL_FEDERAL, 'Federal / National level'),
+        (LEVEL_STATE, 'State level'),
     ]
 
     SECTOR_ENERGY = 'Energy, Utilities, Agriculture'
@@ -43,7 +43,7 @@ class Org(models.Model):
     ]
 
     name = models.CharField(max_length=255, null=False, unique=True)
-    level = models.CharField(max_length=255, choices=LEVEL, default=LEVEL_NATIONAL)
+    level = models.CharField(max_length=255, choices=LEVEL, default=LEVEL_FEDERAL)
     sector = models.CharField(max_length=255, choices=SECTOR, default=SECTOR_ADMIN)
     tier = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)], default=5)
     comment = models.TextField(blank=True)
