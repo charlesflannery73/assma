@@ -169,7 +169,7 @@ class OrgDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView, Vie
     success_url = '/'
     permission_required = ('web.delete_org')
 
-    def delete(self, request, *args, **kwargs):
+    def form_valid(self, request, *args, **kwargs):
         self.object = self.get_object()
         name = self.object.name
         pk = self.object.id
@@ -273,7 +273,7 @@ class AssetDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     success_url = '/'
     permission_required = ('web.delete_asset')
 
-    def delete(self, *args, **kwargs):
+    def form_valid(self, *args, **kwargs):
         self.object = self.get_object()
         name = self.object.name
         org = self.object.org

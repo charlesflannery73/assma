@@ -17,7 +17,7 @@ class OrgTestCase(TestCase):
         OrgName = Org.objects.get(name="test_org")
         self.assertEqual(OrgName.name, "test_org")
         self.assertEqual(OrgName.tier, 5)
-        self.assertEqual(OrgName.level, "National")
+        self.assertEqual(OrgName.level, "Federal")
         self.assertEqual(OrgName.sector, "Education")
         self.assertEqual(OrgName.comment, "test org comment")
 
